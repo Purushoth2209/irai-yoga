@@ -1,0 +1,717 @@
+<!-- Onboarding.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Your Profile – Irai Yoga</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          sage: { 50:'#f2f7f2',100:'#e2efe2',200:'#c4dfc3',300:'#9dc89b',400:'#6daa6a',500:'#4a8c47',600:'#387035',700:'#2d5a2b',800:'#254924',900:'#1e3b1d' },
+          cream:{ 50:'#fdfcf8',100:'#faf7f0',200:'#f4ede0' },
+        },
+        fontFamily: {
+          serif: ['"Cormorant Garamond"','serif'],
+          sans:  ['"DM Sans"','sans-serif'],
+        }
+      }}
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #e8ede8;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+
+    /* ── Phone ── */
+    .phone {
+      width: 390px; min-width: 390px; max-width: 390px;
+      min-height: 100vh;
+      background: #f2f7f2;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    @media (max-width: 430px) {
+      body { background: #f2f7f2; }
+      .phone { width: 100vw; min-width: unset; max-width: 100vw; }
+    }
+
+    /* ── Grain ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
+
+    /* ── Blobs ── */
+    .blob { position: fixed; border-radius: 9999px; filter: blur(60px); pointer-events: none; z-index: 0; }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(242,247,242,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e2efe2;
+      padding: 16px 24px 14px;
+      flex-shrink: 0;
+    }
+
+    /* ── Eyebrow ── */
+    .eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .63rem; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase; color: #6daa6a;
+    }
+
+    /* ── Step pills ── */
+    .step-pills { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+
+    .step-pill {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 12px 5px 6px; border-radius: 99px;
+      font-size: 11px; font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      border: 1.5px solid #e2efe2; background: #fff; color: #9dc89b;
+      transition: all .35s ease;
+    }
+    .step-pill.active { background: #4a8c47; border-color: #4a8c47; color: #fff; box-shadow: 0 4px 12px rgba(74,140,71,0.28); }
+    .step-pill.done   { background: #f2f7f2; border-color: #9dc89b; color: #4a8c47; }
+
+    .step-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      background: rgba(0,0,0,0.06); flex-shrink: 0;
+    }
+    .step-pill.active .step-num { background: rgba(255,255,255,0.25); color: #fff; }
+    .step-pill.done   .step-num { background: #4a8c47; color: #fff; font-size: 9px; }
+
+    .step-connector { flex: 1; height: 1.5px; background: #e2efe2; border-radius: 2px; position: relative; overflow: hidden; }
+    .step-connector-fill {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      background: linear-gradient(90deg, #9dc89b, #4a8c47);
+      border-radius: 2px; width: 0%;
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Progress bar ── */
+    .progress-track { height: 3px; background: #e2efe2; border-radius: 99px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6daa6a, #4a8c47);
+      border-radius: 99px;
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Slides ── */
+    .slides-outer { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .slides-track {
+      display: flex; width: 200%;
+      flex: 1;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    .slide {
+      width: 50%; flex-shrink: 0;
+      overflow-y: auto; overflow-x: hidden;
+      padding: 20px 24px 24px;
+    }
+    .slide::-webkit-scrollbar { display: none; }
+    .slide { scrollbar-width: none; }
+
+    /* ── Card ── */
+    .card {
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06), 0 1px 4px 0 rgba(0,0,0,0.04);
+      border: 1px solid rgba(196,223,195,0.4);
+    }
+
+    /* ── Input ── */
+    .input {
+      width: 100%;
+      padding: 11px 13px 11px 40px;
+      border-radius: 13px; border: 1px solid #e2efe2;
+      font-size: 13px; font-family: 'DM Sans', sans-serif;
+      background: #f2f7f2; color: #1e3b1d;
+      transition: all .2s; outline: none;
+    }
+    .input::placeholder { color: #9dc89b; }
+    .input:focus { border-color: #4a8c47; background: #fff; box-shadow: 0 0 0 3px rgba(157,200,155,0.4); }
+
+    .input-icon {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: #9dc89b; pointer-events: none; transition: color .2s;
+    }
+    .field-wrap:focus-within .input-icon { color: #4a8c47; }
+
+    /* ── Select ── */
+    .select {
+      width: 100%; padding: 11px 13px 11px 40px;
+      border-radius: 13px; border: 1px solid #e2efe2;
+      font-size: 13px; font-family: 'DM Sans', sans-serif;
+      background: #f2f7f2; color: #1e3b1d;
+      appearance: none; outline: none;
+      transition: all .2s; cursor: pointer;
+    }
+    .select:focus { border-color: #4a8c47; background: #fff; box-shadow: 0 0 0 3px rgba(157,200,155,0.4); }
+
+    /* ── Chip ── */
+    .chip {
+      padding: 6px 13px; border-radius: 999px;
+      border: 1.5px solid #c4dfc3; font-size: 12px;
+      font-family: 'DM Sans', sans-serif; font-weight: 500;
+      cursor: pointer; transition: all .2s;
+      color: #2d5a2b; background: #fff; user-select: none;
+    }
+    .chip:hover { border-color: #4a8c47; background: #f2f7f2; }
+    .chip.active { background: #4a8c47; color: white; border-color: #4a8c47; }
+
+    /* ── Doc sections ── */
+    .doc-section {
+      border: 1.5px solid #e2efe2; border-radius: 16px;
+      overflow: hidden; transition: border-color .2s;
+    }
+    .doc-section.has-file { border-color: #9dc89b; }
+
+    .doc-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; cursor: pointer;
+      background: #fff; transition: background .15s;
+    }
+    .doc-header:hover { background: #f2f7f2; }
+
+    .doc-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .doc-info { flex: 1; min-width: 0; }
+    .doc-title { font-size: 13px; font-weight: 600; color: #1e3b1d; line-height: 1.3; }
+    .doc-subtitle { font-size: 11px; color: #9dc89b; margin-top: 1px; font-weight: 400; }
+
+    .doc-badge {
+      font-size: 10px; font-weight: 600; padding: 3px 8px;
+      border-radius: 99px; border: 1px solid #e2efe2;
+      color: #9dc89b; white-space: nowrap; flex-shrink: 0;
+    }
+    .doc-badge.uploaded { background: #f2f7f2; color: #4a8c47; border-color: #c4dfc3; }
+
+    .doc-drop-zone {
+      display: none; flex-direction: column; align-items: center;
+      gap: 6px; padding: 16px;
+      background: #f2f7f2; border-top: 1px solid #e2efe2;
+      cursor: pointer; text-align: center;
+    }
+    .doc-drop-zone.open { display: flex; }
+    .doc-drop-zone:hover { background: #e2efe2; }
+
+    .file-preview {
+      display: none; align-items: center; gap: 10px;
+      padding: 10px 14px; background: #f2f7f2;
+      border-top: 1px solid #e2efe2;
+    }
+    .file-preview.visible { display: flex; }
+
+    /* ── Info note ── */
+    .info-note {
+      font-size: 11.5px; color: #6daa6a;
+      background: #f2f7f2; border: 1px solid #e2efe2;
+      border-radius: 10px; padding: 9px 12px;
+      display: flex; align-items: flex-start; gap: 7px; line-height: 1.5;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%; padding: 13px; border-radius: 14px;
+      background: #4a8c47; color: white;
+      font-weight: 600; font-family: 'DM Sans', sans-serif; font-size: 14px;
+      cursor: pointer; border: none; transition: all .2s ease;
+      box-shadow: 0 4px 16px -2px rgba(74,140,71,0.40);
+    }
+    .btn-primary:hover { background: #387035; }
+    .btn-primary:active { transform: scale(.97); }
+
+    .btn-back {
+      display: flex; align-items: center; gap: 5px;
+      background: none; border: 1.5px solid #e2efe2;
+      border-radius: 12px; padding: 9px 16px;
+      font-size: 13px; font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      color: #6daa6a; cursor: pointer; transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-back:hover { border-color: #9dc89b; background: #fff; color: #4a8c47; }
+
+    /* ── Sticky footer ── */
+    .sticky-footer {
+      position: sticky; bottom: 0; z-index: 20;
+      background: rgba(242,247,242,0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid #e2efe2;
+      padding: 14px 24px;
+      flex-shrink: 0;
+    }
+
+    /* ── Logo ring ── */
+    .logo-ring { background: linear-gradient(135deg, #9dc89b 0%, #4a8c47 100%); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .fu  { animation: fadeUp .45s ease both; }
+    .d1  { animation-delay: .05s; } .d2 { animation-delay: .10s; }
+    .d3  { animation-delay: .15s; } .d4 { animation-delay: .20s; }
+
+    /* Step section heading */
+    .step-heading {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+    }
+    .step-heading-icon {
+      width: 22px; height: 22px; border-radius: 7px;
+      background: #4a8c47;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Blobs -->
+  <div class="blob w-72 h-72 top-0 right-0 -translate-y-1/4 translate-x-1/4" style="background:#c4dfc3;opacity:.50;"></div>
+  <div class="blob w-56 h-56 bottom-32 left-0 -translate-x-1/3" style="background:#e2efe2;opacity:.60;"></div>
+
+  <div class="phone relative z-10">
+
+    <!-- ══ STICKY TOP BAR ══ -->
+    <div class="top-bar">
+
+      <!-- Brand row -->
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <p class="eyebrow">Complete Your Profile</p>
+          <h1 class="text-[1.65rem] font-bold text-sage-900 leading-none tracking-tight mt-0.5">
+            Irai <span class="text-sage-500 italic">Yoga</span>
+          </h1>
+        </div>
+        <div class="logo-ring w-10 h-10 rounded-xl p-[2px] shadow-md flex-shrink-0">
+          <div class="w-full h-full rounded-[10px] bg-sage-50 flex items-center justify-center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M12 20C12 20 5 15 5 9C5 6.24 7.24 4 10 4C10.9 4 11.75 4.25 12.47 4.68C13.19 4.25 14.09 4 15 4C17.76 4 20 6.24 20 9C20 15 12 20 12 20Z" fill="#4a8c47"/>
+              <path d="M12 20C12 20 7 17 6.5 11.5C8.5 13 10.5 14 12 14C13.5 14 15.5 13 17.5 11.5C17 17 12 20 12 20Z" fill="#9dc89b"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step pills -->
+      <div class="step-pills">
+        <div class="step-pill active" id="pill1">
+          <div class="step-num" id="num1">1</div>
+          <span>Patient Info</span>
+        </div>
+        <div class="step-connector">
+          <div class="step-connector-fill" id="connector1"></div>
+        </div>
+        <div class="step-pill" id="pill2">
+          <div class="step-num" id="num2">2</div>
+          <span>Medical Docs</span>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[10.5px] text-sage-400 font-medium" id="progressSubtitle">Fill in your details</span>
+          <span class="text-[10.5px] text-sage-500 font-semibold" id="progressLabel">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ SLIDES ══ -->
+    <div class="slides-outer">
+      <div class="slides-track" id="slidesTrack">
+
+        <!-- ───────── STEP 1 ───────── -->
+        <div class="slide" id="step1">
+
+          <div class="mb-5 fu">
+            <div class="step-heading">
+              <div class="step-heading-icon">
+                <svg width="12" height="12" fill="white" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+              </div>
+              <h2 class="text-[1.15rem] font-semibold text-sage-900">Patient Info</h2>
+            </div>
+            <p class="text-[12px] text-sage-700/50 font-light ml-[30px]">Tell us about yourself so we can tailor your experience.</p>
+          </div>
+
+          <!-- Basic Details -->
+          <div class="card p-4 mb-4 fu d1">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-7 h-7 rounded-lg bg-sage-50 border border-sage-100 flex items-center justify-center text-sm">👤</div>
+              <span class="text-[13px] font-semibold text-sage-900">Basic Details</span>
+              <span class="ml-auto text-[10px] text-sage-400 border border-sage-100 rounded-full px-2 py-0.5">Optional</span>
+            </div>
+            <div class="flex flex-col gap-3">
+              <div class="flex gap-2">
+                <div class="field-wrap relative flex-1">
+                  <input type="number" placeholder="Age" class="input" style="padding-left:13px;" oninput="updateProgress()"/>
+                </div>
+                <div class="field-wrap relative flex-1">
+                  <span class="input-icon" style="left:10px;">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+                  </span>
+                  <select class="select" oninput="updateProgress()">
+                    <option value="" disabled selected>Gender</option>
+                    <option>Male</option><option>Female</option>
+                    <option>Non-binary</option><option>Prefer not to say</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-wrap relative">
+                <span class="input-icon">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-3-3v6m9-6a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
+                <input type="text" placeholder="Primary concern (e.g. Back pain)" class="input" oninput="updateProgress()"/>
+              </div>
+              <div class="field-wrap relative">
+                <span class="input-icon">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </span>
+                <select class="select" oninput="updateProgress()">
+                  <option value="" disabled selected>Yoga experience level</option>
+                  <option>Complete Beginner</option>
+                  <option>Some Experience (1–2 yrs)</option>
+                  <option>Intermediate (2–5 yrs)</option>
+                  <option>Advanced (5+ yrs)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health Conditions -->
+          <div class="card p-4 fu d2">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-sm">🌿</div>
+              <span class="text-[13px] font-semibold text-sage-900">Health Conditions</span>
+              <span class="ml-auto text-[10px] text-sage-400 border border-sage-100 rounded-full px-2 py-0.5">Optional</span>
+            </div>
+            <p class="text-[11.5px] text-sage-700/50 mb-3 font-light">Select all that apply to you.</p>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <div class="chip" onclick="toggleChip(this)">Back Pain</div>
+              <div class="chip" onclick="toggleChip(this)">Stress</div>
+              <div class="chip" onclick="toggleChip(this)">Anxiety</div>
+              <div class="chip" onclick="toggleChip(this)">Diabetes</div>
+              <div class="chip" onclick="toggleChip(this)">Hypertension</div>
+              <div class="chip" onclick="toggleChip(this)">Arthritis</div>
+              <div class="chip" onclick="toggleChip(this)">Insomnia</div>
+              <div class="chip" onclick="toggleChip(this)">Obesity</div>
+              <div class="chip" onclick="toggleChip(this)">PCOS</div>
+              <div class="chip" onclick="toggleChip(this)">Thyroid</div>
+            </div>
+            <div class="field-wrap relative">
+              <span class="input-icon">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              </span>
+              <input type="text" placeholder="Other condition…" class="input"/>
+            </div>
+          </div>
+
+        </div><!-- /step1 -->
+
+        <!-- ───────── STEP 2 ───────── -->
+        <div class="slide" id="step2">
+
+          <div class="mb-4">
+            <div class="step-heading">
+              <div class="step-heading-icon">
+                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h6M5 8h14M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>
+              </div>
+              <h2 class="text-[1.15rem] font-semibold text-sage-900">Medical Documents</h2>
+            </div>
+            <p class="text-[12px] text-sage-700/50 font-light ml-[30px]">Upload reports so your therapist can prepare better.</p>
+          </div>
+
+          <!-- Security note -->
+          <div class="info-note mb-4">
+            <svg class="flex-shrink-0 mt-0.5" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#6daa6a" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m0-10v4m9 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>All documents are encrypted and only shared with your assigned therapist. PDF, JPG, PNG · max 10 MB each.</span>
+          </div>
+
+          <!-- Doc upload card -->
+          <div class="card p-4">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-7 h-7 rounded-lg bg-teal-50 border border-teal-100 flex items-center justify-center text-sm">📂</div>
+              <span class="text-[13px] font-semibold text-sage-900">Upload by Category</span>
+              <span class="ml-auto text-[10px] text-sage-400 border border-sage-100 rounded-full px-2 py-0.5">Optional</span>
+            </div>
+
+            <div class="flex flex-col gap-2">
+
+              <!-- Lab Reports -->
+              <div class="doc-section" id="docLab">
+                <div class="doc-header" onclick="toggleDoc('docLab','dropLab','badgeLab')">
+                  <div class="doc-icon" style="background:#fef3c7;">🧪</div>
+                  <div class="doc-info">
+                    <div class="doc-title">Lab Reports</div>
+                    <div class="doc-subtitle">Blood tests, CBC, thyroid panel…</div>
+                  </div>
+                  <span class="doc-badge" id="badgeLab">+ Add</span>
+                </div>
+                <div class="doc-drop-zone" id="dropLab" onclick="mockUpload('docLab','badgeLab','previewLab','lab_report.pdf','1.2 MB')">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9dc89b" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v8"/></svg>
+                  <p style="font-size:12px;color:#6daa6a;font-weight:500;">Tap to upload lab report</p>
+                  <p style="font-size:11px;color:#9dc89b;">PDF, JPG, PNG · max 10 MB</p>
+                </div>
+                <div class="file-preview" id="previewLab">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#f2f7f2;border:1px solid #e2efe2;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📄</div>
+                  <div style="flex:1;min-width:0;"><p style="font-size:12px;font-weight:600;color:#1e3b1d;" id="nameLab">lab_report.pdf</p><p style="font-size:11px;color:#9dc89b;" id="sizeLab">Uploaded · 1.2 MB</p></div>
+                  <button onclick="removeFile('docLab','badgeLab','previewLab')" style="background:none;border:none;color:#9dc89b;cursor:pointer;padding:4px;font-size:15px;">✕</button>
+                </div>
+              </div>
+
+              <!-- Prescriptions -->
+              <div class="doc-section" id="docRx">
+                <div class="doc-header" onclick="toggleDoc('docRx','dropRx','badgeRx')">
+                  <div class="doc-icon" style="background:#ede9fe;">💊</div>
+                  <div class="doc-info">
+                    <div class="doc-title">Prescriptions</div>
+                    <div class="doc-subtitle">Current medications, doctor's Rx…</div>
+                  </div>
+                  <span class="doc-badge" id="badgeRx">+ Add</span>
+                </div>
+                <div class="doc-drop-zone" id="dropRx" onclick="mockUpload('docRx','badgeRx','previewRx','prescription.pdf','0.8 MB')">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9dc89b" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v8"/></svg>
+                  <p style="font-size:12px;color:#6daa6a;font-weight:500;">Tap to upload prescription</p>
+                  <p style="font-size:11px;color:#9dc89b;">PDF, JPG, PNG · max 10 MB</p>
+                </div>
+                <div class="file-preview" id="previewRx">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#f2f7f2;border:1px solid #e2efe2;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📄</div>
+                  <div style="flex:1;min-width:0;"><p style="font-size:12px;font-weight:600;color:#1e3b1d;">prescription.pdf</p><p style="font-size:11px;color:#9dc89b;">Uploaded · 0.8 MB</p></div>
+                  <button onclick="removeFile('docRx','badgeRx','previewRx')" style="background:none;border:none;color:#9dc89b;cursor:pointer;padding:4px;font-size:15px;">✕</button>
+                </div>
+              </div>
+
+              <!-- Scans & Imaging -->
+              <div class="doc-section" id="docScan">
+                <div class="doc-header" onclick="toggleDoc('docScan','dropScan','badgeScan')">
+                  <div class="doc-icon" style="background:#e0f2fe;">🩻</div>
+                  <div class="doc-info">
+                    <div class="doc-title">Scans & Imaging</div>
+                    <div class="doc-subtitle">X-Ray, MRI, CT scan, ultrasound…</div>
+                  </div>
+                  <span class="doc-badge" id="badgeScan">+ Add</span>
+                </div>
+                <div class="doc-drop-zone" id="dropScan" onclick="mockUpload('docScan','badgeScan','previewScan','mri_report.pdf','3.4 MB')">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9dc89b" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v8"/></svg>
+                  <p style="font-size:12px;color:#6daa6a;font-weight:500;">Tap to upload scan / imaging</p>
+                  <p style="font-size:11px;color:#9dc89b;">PDF, JPG, PNG · max 10 MB</p>
+                </div>
+                <div class="file-preview" id="previewScan">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#f2f7f2;border:1px solid #e2efe2;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📄</div>
+                  <div style="flex:1;min-width:0;"><p style="font-size:12px;font-weight:600;color:#1e3b1d;">mri_report.pdf</p><p style="font-size:11px;color:#9dc89b;">Uploaded · 3.4 MB</p></div>
+                  <button onclick="removeFile('docScan','badgeScan','previewScan')" style="background:none;border:none;color:#9dc89b;cursor:pointer;padding:4px;font-size:15px;">✕</button>
+                </div>
+              </div>
+
+              <!-- Consultation Notes -->
+              <div class="doc-section" id="docNotes">
+                <div class="doc-header" onclick="toggleDoc('docNotes','dropNotes','badgeNotes')">
+                  <div class="doc-icon" style="background:#fce7f3;">📋</div>
+                  <div class="doc-info">
+                    <div class="doc-title">Consultation Notes</div>
+                    <div class="doc-subtitle">Previous doctor / physio / specialist notes…</div>
+                  </div>
+                  <span class="doc-badge" id="badgeNotes">+ Add</span>
+                </div>
+                <div class="doc-drop-zone" id="dropNotes" onclick="mockUpload('docNotes','badgeNotes','previewNotes','consultation_notes.pdf','0.5 MB')">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9dc89b" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v8"/></svg>
+                  <p style="font-size:12px;color:#6daa6a;font-weight:500;">Tap to upload notes</p>
+                  <p style="font-size:11px;color:#9dc89b;">PDF, JPG, PNG · max 10 MB</p>
+                </div>
+                <div class="file-preview" id="previewNotes">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#f2f7f2;border:1px solid #e2efe2;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📄</div>
+                  <div style="flex:1;min-width:0;"><p style="font-size:12px;font-weight:600;color:#1e3b1d;">consultation_notes.pdf</p><p style="font-size:11px;color:#9dc89b;">Uploaded · 0.5 MB</p></div>
+                  <button onclick="removeFile('docNotes','badgeNotes','previewNotes')" style="background:none;border:none;color:#9dc89b;cursor:pointer;padding:4px;font-size:15px;">✕</button>
+                </div>
+              </div>
+
+              <!-- Insurance / ID -->
+              <div class="doc-section" id="docId">
+                <div class="doc-header" onclick="toggleDoc('docId','dropId','badgeId')">
+                  <div class="doc-icon" style="background:#ecfdf5;">🪪</div>
+                  <div class="doc-info">
+                    <div class="doc-title">Insurance & ID</div>
+                    <div class="doc-subtitle">Health insurance card, Aadhar, Govt. ID…</div>
+                  </div>
+                  <span class="doc-badge" id="badgeId">+ Add</span>
+                </div>
+                <div class="doc-drop-zone" id="dropId" onclick="mockUpload('docId','badgeId','previewId','insurance_card.pdf','0.3 MB')">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#9dc89b" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v8"/></svg>
+                  <p style="font-size:12px;color:#6daa6a;font-weight:500;">Tap to upload ID / insurance</p>
+                  <p style="font-size:11px;color:#9dc89b;">PDF, JPG, PNG · max 10 MB</p>
+                </div>
+                <div class="file-preview" id="previewId">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#f2f7f2;border:1px solid #e2efe2;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📄</div>
+                  <div style="flex:1;min-width:0;"><p style="font-size:12px;font-weight:600;color:#1e3b1d;">insurance_card.pdf</p><p style="font-size:11px;color:#9dc89b;">Uploaded · 0.3 MB</p></div>
+                  <button onclick="removeFile('docId','badgeId','previewId')" style="background:none;border:none;color:#9dc89b;cursor:pointer;padding:4px;font-size:15px;">✕</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- /step2 -->
+
+      </div><!-- /slides-track -->
+    </div><!-- /slides-outer -->
+
+    <!-- ══ STICKY FOOTER ══ -->
+    <div class="sticky-footer">
+
+      <!-- Footer: Step 1 -->
+      <div id="footer1">
+        <button class="btn-primary" onclick="goToStep2()">Continue to Documents →</button>
+        <p class="text-center text-[12px] text-sage-400 mt-2 cursor-pointer hover:text-sage-600 transition-colors" onclick="goHome()">Skip all & go to home</p>
+      </div>
+
+      <!-- Footer: Step 2 -->
+      <div id="footer2" style="display:none;">
+        <div class="flex gap-3">
+          <button class="btn-back" onclick="goToStep1()">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            Back
+          </button>
+          <button class="btn-primary" style="flex:1;" onclick="goHome()">Finish Setup →</button>
+        </div>
+        <p class="text-center text-[12px] text-sage-400 mt-2 cursor-pointer hover:text-sage-600 transition-colors" onclick="goHome()">Skip documents for now</p>
+      </div>
+
+    </div>
+
+  </div><!-- /phone -->
+
+  <script>
+    let currentStep = 1;
+
+    function goToStep2() {
+      currentStep = 2;
+      document.getElementById('slidesTrack').style.transform = 'translateX(-50%)';
+
+      // Pill 1 → done
+      const p1 = document.getElementById('pill1');
+      p1.classList.remove('active'); p1.classList.add('done');
+      document.getElementById('num1').textContent = '✓';
+
+      // Pill 2 → active
+      document.getElementById('pill2').classList.add('active');
+      document.getElementById('connector1').style.width = '100%';
+
+      // Footer swap
+      document.getElementById('footer1').style.display = 'none';
+      document.getElementById('footer2').style.display = 'block';
+
+      document.getElementById('progressSubtitle').textContent = 'Upload your documents';
+      document.getElementById('step2').scrollTop = 0;
+      updateProgress();
+    }
+
+    function goToStep1() {
+      currentStep = 1;
+      document.getElementById('slidesTrack').style.transform = 'translateX(0)';
+
+      // Pill 1 → active
+      const p1 = document.getElementById('pill1');
+      p1.classList.add('active'); p1.classList.remove('done');
+      document.getElementById('num1').textContent = '1';
+
+      // Pill 2 → inactive
+      document.getElementById('pill2').classList.remove('active');
+      document.getElementById('connector1').style.width = '0%';
+
+      // Footer swap
+      document.getElementById('footer1').style.display = 'block';
+      document.getElementById('footer2').style.display = 'none';
+
+      document.getElementById('progressSubtitle').textContent = 'Fill in your details';
+      updateProgress();
+    }
+
+    function toggleDoc(sectionId, dropId) {
+      const drop = document.getElementById(dropId);
+      const preview = document.getElementById(sectionId).querySelector('.file-preview');
+      if (preview && preview.classList.contains('visible')) return;
+      drop.classList.toggle('open');
+    }
+
+    function mockUpload(sectionId, badgeId, previewId) {
+      const section = document.getElementById(sectionId);
+      section.querySelector('.doc-drop-zone').classList.remove('open');
+      document.getElementById(previewId).classList.add('visible');
+      const badge = document.getElementById(badgeId);
+      badge.textContent = '✓ Done';
+      badge.classList.add('uploaded');
+      section.classList.add('has-file');
+      updateProgress();
+    }
+
+    function removeFile(sectionId, badgeId, previewId) {
+      document.getElementById(previewId).classList.remove('visible');
+      const badge = document.getElementById(badgeId);
+      badge.textContent = '+ Add';
+      badge.classList.remove('uploaded');
+      document.getElementById(sectionId).classList.remove('has-file');
+      updateProgress();
+    }
+
+    function toggleChip(el) {
+      el.classList.toggle('active');
+      updateProgress();
+    }
+
+    function updateProgress() {
+      let pct = 0;
+      if (currentStep === 1) {
+        const inputs = document.querySelectorAll('#step1 .input, #step1 .select');
+        let filled = 0;
+        inputs.forEach(i => { if (i.value && i.value.trim()) filled++; });
+        const chips = document.querySelectorAll('#step1 .chip.active').length;
+        const total = inputs.length + 1;
+        pct = Math.round(((filled + (chips > 0 ? 1 : 0)) / total) * 50);
+      } else {
+        const docs = document.querySelectorAll('.file-preview.visible').length;
+        pct = 50 + Math.min(Math.round((docs / 5) * 50), 50);
+      }
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = pct + '%';
+    }
+
+    function goHome() {
+      window.location.href = 'index.html';
+    }
+  </script>
+
+</body>
+</html>

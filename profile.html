@@ -1,0 +1,432 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile – Irai Yoga</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          sage: { 50:'#f2f7f2',100:'#e2efe2',200:'#c4dfc3',300:'#9dc89b',400:'#6daa6a',500:'#4a8c47',600:'#387035',700:'#2d5a2b',800:'#254924',900:'#1e3b1d' },
+          cream:{ 50:'#fdfcf8',100:'#faf7f0',200:'#f4ede0' },
+        },
+        fontFamily: {
+          serif: ['"Cormorant Garamond"','serif'],
+          sans:  ['"DM Sans"','sans-serif'],
+        },
+        boxShadow: {
+          'card':  '0 2px 16px 0 rgba(0,0,0,0.06), 0 1px 4px 0 rgba(0,0,0,0.04)',
+          'card-hover': '0 12px 32px -4px rgba(74,140,71,0.18), 0 4px 12px -2px rgba(0,0,0,0.08)',
+          'btn':   '0 4px 16px -2px rgba(74,140,71,0.40)',
+        }
+      }}
+    }
+  </script>
+
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:#e8ede8;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+    h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;}
+
+    /* ── Phone shell ── */
+    .phone{
+      width:390px;min-width:390px;max-width:390px;
+      min-height:100vh;
+      background:#f2f7f2;
+      position:relative;
+      overflow:hidden;
+      display:flex;flex-direction:column;
+    }
+    @media(max-width:430px){
+      body{background:#f2f7f2;}
+      .phone{width:100vw;min-width:unset;max-width:100vw;}
+    }
+
+    /* ── Grain ── */
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      opacity:.5;}
+
+    /* ── Blobs ── */
+    .blob{position:fixed;border-radius:9999px;filter:blur(60px);pointer-events:none;z-index:0;}
+
+    /* ── Scrollable content ── */
+    .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:88px;}
+    .scroll-area::-webkit-scrollbar{display:none;}
+    .scroll-area{scrollbar-width:none;}
+
+    /* ── Top bar ── */
+    .top-bar{
+      position:sticky;top:0;z-index:20;
+      background:rgba(242,247,242,0.92);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(196,223,195,0.5);
+      padding:16px 24px 14px;
+    }
+
+    /* ── Hero banner ── */
+    .hero-banner{
+      margin:0 24px 20px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#2d5a2b 0%,#4a8c47 60%,#6daa6a 100%);
+      padding:28px 24px 24px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 8px 32px -4px rgba(45,90,43,0.35);
+    }
+    .hero-banner::before{
+      content:'';position:absolute;top:-40px;right:-40px;
+      width:160px;height:160px;
+      border-radius:9999px;
+      background:rgba(255,255,255,0.06);
+    }
+    .hero-banner::after{
+      content:'';position:absolute;bottom:-50px;right:30px;
+      width:120px;height:120px;
+      border-radius:9999px;
+      background:rgba(255,255,255,0.04);
+    }
+
+    /* ── Avatar ── */
+    .avatar-ring{background:linear-gradient(135deg,rgba(255,255,255,0.8) 0%,rgba(255,255,255,0.4) 100%);}
+
+    /* ── Cards ── */
+    .card{
+      background:#fff;
+      border-radius:20px;
+      box-shadow:0 2px 16px 0 rgba(0,0,0,0.06),0 1px 4px 0 rgba(0,0,0,0.04);
+      border:1px solid rgba(196,223,195,0.4);
+    }
+
+    /* ── Chips ── */
+    .chip{
+      padding:5px 14px;
+      border-radius:999px;
+      border:1px solid #c4dfc3;
+      background:linear-gradient(135deg,#f2f7f2,#e2efe2);
+      font-size:11px;
+      color:#2d5a2b;
+      font-weight:500;
+    }
+
+    /* ── Stat card ── */
+    .stat-card{
+      background:#fff;
+      border-radius:16px;
+      border:1px solid rgba(196,223,195,0.4);
+      box-shadow:0 1px 8px rgba(0,0,0,0.05);
+      padding:14px 12px;
+      text-align:center;
+      flex:1;
+    }
+
+    /* ── Action rows ── */
+    .action-row{
+      display:flex;align-items:center;gap:14px;
+      padding:13px 0;
+      border-bottom:1px solid #f0f5f0;
+      cursor:pointer;
+      transition:all .15s ease;
+    }
+    .action-row:last-child{border-bottom:none;}
+    .action-row:active{opacity:.7;}
+
+    .action-icon{
+      width:36px;height:36px;
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:16px;
+      flex-shrink:0;
+    }
+
+    /* ── Report item ── */
+    .report-item{
+      display:flex;align-items:center;gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid #f0f5f0;
+    }
+    .report-item:last-child{border-bottom:none;}
+
+    /* ── Bottom nav ── */
+    .bottom-nav{
+      position:sticky;bottom:0;z-index:50;
+      height:68px;
+      background:rgba(255,255,255,0.96);
+      backdrop-filter:blur(20px);
+      border-top:1px solid #e2efe2;
+      box-shadow:0 -8px 32px 0 rgba(0,0,0,0.06);
+      display:flex;align-items:center;justify-content:space-around;
+      flex-shrink:0;
+    }
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 16px;cursor:pointer;transition:all .15s ease;}
+    .nav-label{font-size:10px;font-weight:500;letter-spacing:.02em;}
+    .nav-item.active .nav-label,.nav-item.active svg{color:#4a8c47;}
+    .nav-item:not(.active) .nav-label,.nav-item:not(.active) svg{color:#9ca3af;}
+
+    /* ── Eyebrow ── */
+    .eyebrow{font-family:'DM Sans',sans-serif;font-size:.63rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6daa6a;}
+
+    /* ── Progress bar ── */
+    .progress-track{height:6px;background:#e2efe2;border-radius:99px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#6daa6a,#4a8c47);}
+
+    /* ── Fade-up ── */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .45s ease both;}
+    .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+    .d4{animation-delay:.24s}.d5{animation-delay:.30s}.d6{animation-delay:.36s}.d7{animation-delay:.42s}
+
+    /* ── Badge ── */
+    .badge{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:3px 10px;border-radius:999px;
+      font-size:10px;font-weight:600;
+      background:rgba(255,255,255,0.2);
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.25);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob w-72 h-72 bg-sage-200 opacity-40 top-0 right-0 -translate-y-1/4 translate-x-1/4"></div>
+  <div class="blob w-56 h-56 bg-sage-100 opacity-50 bottom-32 left-0 -translate-x-1/3"></div>
+
+  <div class="phone relative z-10">
+
+    <!-- ── TOP BAR ── -->
+    <div class="top-bar fu">
+      <!-- <p class="eyebrow mb-0.5"></p> -->
+      <h1 class="text-[1.75rem] font-bold text-sage-900 leading-none">Your Profile</h1>
+    </div>
+
+    <div class="scroll-area">
+
+      <!-- ── HERO BANNER ── -->
+      <div class="hero-banner mt-6 fu d1">
+        <div class="flex items-center gap-4 relative z-10">
+          <!-- Avatar -->
+          <div class="avatar-ring w-16 h-16 rounded-full p-[2.5px] shadow-lg flex-shrink-0">
+            <div class="w-full h-full rounded-full bg-white flex items-center justify-center text-sage-700 font-semibold text-lg">
+              HA
+            </div>
+          </div>
+          <!-- Info -->
+          <div>
+            <h2 class="text-[1.35rem] font-semibold text-white leading-tight">Hamza Ali</h2>
+            <p class="text-[12px] text-white/70 mt-0.5">Member since Jan 2025</p>
+            <div class="flex gap-2 mt-2">
+              <span class="badge">✦ Beginner</span>
+              <span class="badge">♂ Male</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Journey Progress -->
+        <div class="mt-5 relative z-10">
+          <div class="flex justify-between mb-1.5">
+            <p class="text-[11px] text-white/80 font-medium">Wellness Journey</p>
+            <p class="text-[11px] text-white/80 font-semibold">34%</p>
+          </div>
+          <div class="h-1.5 bg-white/20 rounded-full overflow-hidden">
+            <div class="h-full w-[34%] bg-white rounded-full"></div>
+          </div>
+          <p class="text-[10px] text-white/50 mt-1.5">Complete your profile to unlock personalised sessions</p>
+        </div>
+      </div>
+
+      <!-- ── STATS ROW ── -->
+      <div class="px-6 mb-5 fu d2">
+        <div class="flex gap-3">
+          <div class="stat-card">
+            <p class="text-[1.4rem] font-bold text-sage-700" style="font-family:'Cormorant Garamond',serif">8</p>
+            <p class="text-[10px] text-sage-500 font-medium mt-0.5">Sessions</p>
+          </div>
+          <div class="stat-card">
+            <p class="text-[1.4rem] font-bold text-sage-700" style="font-family:'Cormorant Garamond',serif">4.2h</p>
+            <p class="text-[10px] text-sage-500 font-medium mt-0.5">Practice</p>
+          </div>
+          <div class="stat-card">
+            <p class="text-[1.4rem] font-bold text-sage-700" style="font-family:'Cormorant Garamond',serif">3</p>
+            <p class="text-[10px] text-sage-500 font-medium mt-0.5">Day Streak 🔥</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BASIC INFO ── -->
+      <div class="px-6 mb-4 fu d3">
+        <div class="card p-4">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 bg-sage-50 rounded-lg flex items-center justify-center text-base">👤</div>
+            <h2 class="text-[1.05rem] font-semibold text-sage-900">Basic Info</h2>
+          </div>
+
+          <div class="flex justify-between items-center text-[13px] py-2 border-b border-sage-50">
+            <span class="text-sage-500">Age</span>
+            <span class="font-semibold text-sage-900">23 years</span>
+          </div>
+          <div class="flex justify-between items-center text-[13px] py-2 border-b border-sage-50">
+            <span class="text-sage-500">Gender</span>
+            <span class="font-semibold text-sage-900">Male</span>
+          </div>
+          <div class="flex justify-between items-center text-[13px] py-2 border-b border-sage-50">
+            <span class="text-sage-500">Experience</span>
+            <span class="font-semibold text-sage-900">Beginner</span>
+          </div>
+          <div class="flex justify-between items-center text-[13px] py-2">
+            <span class="text-sage-500">Location</span>
+            <span class="font-semibold text-sage-900">Chennai, IN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HEALTH CONDITIONS ── -->
+      <div class="px-6 mb-4 fu d4">
+        <div class="card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 bg-green-50 rounded-lg flex items-center justify-center text-base">🌿</div>
+              <h2 class="text-[1.05rem] font-semibold text-sage-900">Health Conditions</h2>
+            </div>
+            <button class="text-[11px] text-sage-500 font-semibold hover:text-sage-700 transition-colors">+ Add</button>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <span class="chip">Back Pain</span>
+            <span class="chip">Stress</span>
+            <span class="chip">Anxiety</span>
+          </div>
+
+          <div class="mt-3 p-3 rounded-xl bg-sage-50 border border-sage-100">
+            <p class="text-[11px] text-sage-600 leading-relaxed">
+              ✦ Your sessions are personalised based on these conditions. <span class="font-semibold text-sage-700">Spine Restore</span> is recommended for you.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MEDICAL REPORTS ── -->
+      <div class="px-6 mb-4 fu d5">
+        <div class="card p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 bg-blue-50 rounded-lg flex items-center justify-center text-base">📂</div>
+              <h2 class="text-[1.05rem] font-semibold text-sage-900">Medical Reports</h2>
+            </div>
+            <button class="text-[11px] text-sage-500 font-semibold hover:text-sage-700 transition-colors">+ Add</button>
+
+          </div>
+
+          <div class="report-item">
+            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-lg border border-red-100 flex-shrink-0">📄</div>
+            <div class="flex-1">
+              <p class="text-[13px] font-semibold text-sage-900">Blood Test.pdf</p>
+              <p class="text-[11px] text-sage-400">Jan 2026 · 1.2 MB</p>
+            </div>
+            <button class="text-sage-400 hover:text-sage-600 transition-colors">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01"/></svg>
+            </button>
+          </div>
+
+          <div class="report-item">
+            <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-lg border border-purple-100 flex-shrink-0">📄</div>
+            <div class="flex-1">
+              <p class="text-[13px] font-semibold text-sage-900">MRI Scan.pdf</p>
+              <p class="text-[11px] text-sage-400">Dec 2025 · 3.4 MB</p>
+            </div>
+            <button class="text-sage-400 hover:text-sage-600 transition-colors">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ACCOUNT ACTIONS ── -->
+      <div class="px-6 mb-4 fu d6">
+        <div class="card p-4">
+          <div class="flex items-center gap-2 mb-1">
+            <div class="w-7 h-7 bg-sage-50 rounded-lg flex items-center justify-center text-base">⚙️</div>
+            <h2 class="text-[1.05rem] font-semibold text-sage-900">Account</h2>
+          </div>
+
+          <div class="action-row">
+            <div class="action-icon bg-sage-50">✏️</div>
+            <div class="flex-1">
+              <p class="text-[13px] font-semibold text-sage-900">Edit Profile</p>
+              <p class="text-[11px] text-sage-400">Name, photo, preferences</p>
+            </div>
+            <svg class="w-4 h-4 text-sage-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+
+          <div class="action-row">
+            <div class="action-icon bg-blue-50">🔒</div>
+            <div class="flex-1">
+              <p class="text-[13px] font-semibold text-sage-900">Privacy Settings</p>
+              <p class="text-[11px] text-sage-400">Data, visibility, sharing</p>
+            </div>
+            <svg class="w-4 h-4 text-sage-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+
+          <div class="action-row">
+            <div class="action-icon bg-amber-50">🔔</div>
+            <div class="flex-1">
+              <p class="text-[13px] font-semibold text-sage-900">Notifications</p>
+              <p class="text-[11px] text-sage-400">Session reminders, tips</p>
+            </div>
+            <svg class="w-4 h-4 text-sage-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+
+          <div class="action-row" style="border-bottom:none;">
+            <div class="action-icon bg-red-50">🚪</div>
+            <div class="flex-1">
+              <p class="text-[13px] font-semibold text-red-400">Logout</p>
+              <p class="text-[11px] text-sage-400">Sign out of your account</p>
+            </div>
+            <svg class="w-4 h-4 text-red-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── APP VERSION ── -->
+      <div class="px-6 mb-6 fu d7">
+        <p class="text-center text-[10px] text-sage-400">Irai Yoga · v1.0.0 · Made with 🌿</p>
+      </div>
+
+    </div><!-- /scroll-area -->
+
+    <!-- ── BOTTOM NAV ── -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="nav-label">Home</span>
+      </a>
+      <a href="listing.html" class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="3"/><path stroke-linecap="round" d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <span class="nav-label">Sessions</span>
+      </a>
+      <div class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="nav-label">Saved</span>
+      </div>
+      <a href="profile.html" class="nav-item active">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+        <span class="nav-label">Profile</span>
+      </a>
+    </nav>
+
+  </div><!-- /phone -->
+</body>
+</html>
