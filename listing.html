@@ -39,7 +39,8 @@
     .search-input:focus{outline:none;box-shadow:0 0 0 3px rgba(157,200,155,0.5);}
     .chip{cursor:pointer;transition:all .15s ease;}
     .chip.active,.chip:hover{background:#4a8c47;color:#fff;border-color:#4a8c47;}
-    .bottom-nav{position:sticky;bottom:0;left:0;right:0;z-index:50;height:68px;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);border-top:1px solid #e2efe2;box-shadow:0 -8px 32px 0 rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-around;flex-shrink:0;}
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:390px;z-index:50;height:68px;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);border-top:1px solid #e2efe2;box-shadow:0 -8px 32px 0 rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-around;}
+    @media(max-width:430px){.bottom-nav{width:100vw;left:0;transform:none;}}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 16px;cursor:pointer;transition:all .15s ease;}
     .nav-item svg{transition:color .15s ease;}
     .nav-label{font-size:10px;font-weight:500;letter-spacing:.02em;transition:color .15s ease;}
@@ -336,7 +337,6 @@
     </nav>
 
     <a href="chat.html"> 
-      <button class="chat-pulse absolute bottom-20 right-5 z-50 rounded-full bg-sage-500 text-white flex items-center justify-center text-xl hover:bg-sage-600 hover:scale-105 active:scale-95 transition-all" style="width:52px;height:52px;" aria-label="Chat">💬</button>
     </a>   </div>
 
   <script>
