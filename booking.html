@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Session – Irai Yoga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          sage: { 50:'#f2f7f2',100:'#e2efe2',200:'#c4dfc3',300:'#9dc89b',400:'#6daa6a',500:'#4a8c47',600:'#387035',700:'#2d5a2b',800:'#254924',900:'#1e3b1d' },
+          cream:{ 50:'#fdfcf8',100:'#faf7f0' },
+        },
+        fontFamily:{ serif:['"Cormorant Garamond"','serif'], sans:['"DM Sans"','sans-serif'] },
+      }}
+    }
+  </script>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:#e8ede8;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;}
+    h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5;}
+    .blob{position:fixed;border-radius:9999px;filter:blur(60px);pointer-events:none;z-index:0;}
+    .phone{width:390px;min-width:390px;max-width:390px;min-height:100vh;background:#f2f7f2;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+    @media(max-width:430px){body{background:#f2f7f2;}.phone{width:100vw;min-width:unset;max-width:100vw;}}
+    .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;}
+    .scroll-area::-webkit-scrollbar,.h-scroll::-webkit-scrollbar{display:none;}
+    .scroll-area,.h-scroll{scrollbar-width:none;}
+    .card{background:#fff;border-radius:20px;box-shadow:0 2px 16px 0 rgba(0,0,0,0.06),0 1px 4px 0 rgba(0,0,0,0.04);border:1px solid rgba(196,223,195,0.4);}
+    .sticky-header{position:sticky;top:0;z-index:20;background:rgba(242,247,242,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(196,223,195,0.5);}
+    .bottom-nav{position:sticky;bottom:0;z-index:50;height:68px;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);border-top:1px solid #e2efe2;box-shadow:0 -8px 32px 0 rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-around;flex-shrink:0;}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 16px;cursor:pointer;}
+    .nav-label{font-size:10px;font-weight:500;letter-spacing:.02em;}
+    .nav-item.active .nav-label,.nav-item.active svg{color:#4a8c47;}
+    .nav-item:not(.active) .nav-label,.nav-item:not(.active) svg{color:#9ca3af;}
+    @keyframes pulse-ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.6);opacity:0}}
+    .chat-pulse::before{content:'';position:absolute;inset:0;border-radius:9999px;background:#4a8c47;animation:pulse-ring 2.2s ease-out infinite;}
+    .avatar-ring{background:linear-gradient(135deg,#9dc89b 0%,#4a8c47 100%);}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .5s ease both;}
+    .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+    .d4{animation-delay:.24s}.d5{animation-delay:.30s}.d6{animation-delay:.36s}
+    .eyebrow{font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6daa6a;}
+
+    /* Date carousel */
+    .h-scroll{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;}
+    .date-card{scroll-snap-align:start;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);background:#fff;border:2px solid rgba(196,223,195,0.5);border-radius:16px;}
+    .date-card:hover{transform:translateY(-2px);}
+    .date-card.selected{background:#4a8c47;border-color:#4a8c47;box-shadow:0 8px 20px -4px rgba(74,140,71,0.4);}
+    .date-card.selected .date-num{color:#fff;}
+    .date-card.selected .date-day{color:rgba(255,255,255,0.7);}
+
+    /* Time slots */
+    .time-slot{cursor:pointer;transition:all .18s cubic-bezier(.34,1.56,.64,1);background:#fff;border:2px solid rgba(196,223,195,0.5);border-radius:14px;}
+    .time-slot:hover{border-color:#6daa6a;color:#4a8c47;transform:scale(1.04);}
+    .time-slot.selected{background:#4a8c47;color:#fff;border-color:#4a8c47;box-shadow:0 6px 16px -4px rgba(74,140,71,0.4);}
+    .time-slot.disabled{opacity:.35;cursor:not-allowed;pointer-events:none;}
+
+    /* Session type */
+    .session-opt{cursor:pointer;transition:all .18s ease;border:2px solid rgba(196,223,195,0.5);border-radius:16px;}
+    .session-opt:hover{border-color:#6daa6a;}
+    .session-opt.selected{border-color:#4a8c47;background:#f2f7f2;}
+    .session-opt.selected .opt-dot{background:#4a8c47;box-shadow:0 0 0 3px rgba(157,200,155,0.4);}
+
+    /* Summary */
+    .sum-row{border-bottom:1px dashed rgba(196,223,195,0.6);}
+    .sum-row:last-child{border-bottom:none;}
+
+    /* Confirm btn */
+    .confirm-btn{transition:all .2s ease;background:linear-gradient(135deg,#4a8c47,#387035);}
+    .confirm-btn:hover{box-shadow:0 12px 28px -6px rgba(74,140,71,0.5);transform:translateY(-2px);}
+    .confirm-btn:active{transform:scale(.97);}
+  </style>
+</head>
+<body>
+  <div class="blob w-64 h-64 bg-sage-200 opacity-40 top-0 right-0 -translate-y-1/4 translate-x-1/4"></div>
+  <div class="blob w-48 h-48 bg-sage-100 opacity-50 bottom-32 left-0 -translate-x-1/3"></div>
+
+  <div class="phone relative z-10">
+
+    <!-- ── HEADER ── -->
+    <div class="sticky-header">
+      <div class="flex items-center justify-between px-5 py-4">
+        <a href="listing.html" class="w-9 h-9 rounded-2xl bg-white border border-sage-100 flex items-center justify-center text-sage-600 shadow-sm hover:bg-sage-50 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </a>
+        <h1 class="text-[1.2rem] font-semibold text-sage-900 tracking-tight">Book Session</h1>
+        <div class="relative">
+          <div class="avatar-ring w-9 h-9 rounded-full p-[2px] shadow-sm">
+            <div class="w-full h-full rounded-full bg-cream-100 flex items-center justify-center">
+              <span class="text-sage-700 font-semibold text-xs">AK</span>
+            </div>
+          </div>
+          <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-white rounded-full"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-area">
+      <div class="flex flex-col gap-5 px-5 pt-5">
+
+        <!-- Therapist card -->
+        <div class="card p-4 fu d1">
+          <div class="flex items-center gap-4">
+            <div class="w-20 h-20 rounded-2xl flex-shrink-0 flex items-center justify-center text-4xl shadow-sm" style="background:linear-gradient(135deg,#c4dfc3,#6daa6a);">🧘♂️</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <h2 class="text-[1.1rem] font-semibold text-sage-900 leading-tight">Dr. Arun Kumar</h2>
+                  <p class="eyebrow mt-0.5">Yoga Therapy</p>
+                </div>
+                <span class="bg-sage-50 border border-sage-100 text-sage-700 text-[12px] font-bold px-2.5 py-1 rounded-xl flex-shrink-0">₹500<span class="text-sage-400/70 font-normal">/session</span></span>
+              </div>
+              <div class="flex items-center gap-1.5 mt-2">
+                <span class="text-amber-400 text-sm leading-none">★★★★★</span>
+                <span class="text-[12px] font-semibold text-sage-900">4.9</span>
+                <span class="text-[11px] text-sage-700/40">(128)</span>
+              </div>
+              <div class="flex gap-1.5 mt-2">
+                <span class="text-[10px] bg-sage-50 border border-sage-100 text-sage-600 px-2 py-0.5 rounded-full">10 yrs exp</span>
+                <span class="text-[10px] bg-emerald-50 border border-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full">Online & In-person</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date selection -->
+        <div class="fu d2">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-[1.3rem] font-semibold text-sage-900">Select Date</h2>
+            <span class="eyebrow" id="month-label"></span>
+          </div>
+          <div class="h-scroll" id="date-track"></div>
+        </div>
+
+        <!-- Time slots -->
+        <div class="fu d3">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-[1.3rem] font-semibold text-sage-900">Select Time</h2>
+            <span class="eyebrow">IST</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2.5" id="time-grid"></div>
+        </div>
+
+        <!-- Session type -->
+        <div class="fu d4">
+          <h2 class="text-[1.3rem] font-semibold text-sage-900 mb-3">Session Type</h2>
+          <div class="flex flex-col gap-3">
+            <div class="session-opt selected bg-sage-50 p-4 flex items-center gap-3" data-session="solo" onclick="selectSession(this)">
+              <div class="w-10 h-10 rounded-xl bg-sage-100 flex items-center justify-center text-xl flex-shrink-0">🧘</div>
+              <div class="flex-1">
+                <p class="text-[13px] font-semibold text-sage-900">1-on-1 Session</p>
+                <p class="text-[11px] text-sage-700/55 mt-0.5">Private, personalised & focused</p>
+              </div>
+              <div class="opt-dot w-4 h-4 rounded-full bg-sage-500 flex-shrink-0 transition-all" style="box-shadow:0 0 0 3px rgba(157,200,155,0.4)"></div>
+            </div>
+            <div class="session-opt bg-white p-4 flex items-center gap-3" data-session="group" onclick="selectSession(this)">
+              <div class="w-10 h-10 rounded-xl bg-sage-50 flex items-center justify-center text-xl flex-shrink-0">👥</div>
+              <div class="flex-1">
+                <p class="text-[13px] font-semibold text-sage-900">Group Session</p>
+                <p class="text-[11px] text-sage-700/55 mt-0.5">Community-driven, 4–8 members</p>
+              </div>
+              <div class="opt-dot w-4 h-4 rounded-full border-2 border-sage-200 flex-shrink-0 transition-all"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="card p-5 fu d5">
+          <h2 class="text-[1.3rem] font-semibold text-sage-900 mb-4">Booking Summary</h2>
+          <div class="flex flex-col gap-3">
+            <div class="sum-row flex items-center justify-between pb-3">
+              <span class="flex items-center gap-2 text-[13px] text-sage-700/60"><span>📅</span> Date</span>
+              <span class="text-[13px] font-semibold text-sage-900" id="summary-date">—</span>
+            </div>
+            <div class="sum-row flex items-center justify-between pb-3">
+              <span class="flex items-center gap-2 text-[13px] text-sage-700/60"><span>🕐</span> Time</span>
+              <span class="text-[13px] font-semibold text-sage-900" id="summary-time">—</span>
+            </div>
+            <div class="sum-row flex items-center justify-between pb-3">
+              <span class="flex items-center gap-2 text-[13px] text-sage-700/60"><span>🧘</span> Session</span>
+              <span class="text-[13px] font-semibold text-sage-900" id="summary-type">1-on-1 Session</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="flex items-center gap-2 text-[13px] text-sage-700/60"><span>💳</span> Total</span>
+              <div class="text-right">
+                <span class="text-[1.3rem] font-bold text-sage-600">₹500</span>
+                <p class="text-[10px] text-sage-700/40 -mt-0.5">incl. platform fee</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="fu d6 pb-4">
+          <a href="payment.html" class="confirm-btn block w-full text-white text-center font-semibold py-4 rounded-2xl text-[15px] tracking-wide shadow-lg">
+            Proceed to Payment →
+          </a>
+          <p class="text-center text-[11px] text-sage-700/40 mt-3">Free cancellation up to 2 hrs before session</p>
+        </div>
+
+      </div>
+    </div><!-- /scroll-area -->
+
+    <!-- ── BOTTOM NAV ── -->
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="nav-label">Home</span>
+      </a>
+      <a href="listing.html" class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="3"/><path stroke-linecap="round" d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <span class="nav-label">Sessions</span>
+      </a>
+      <div class="nav-item active">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+        <span class="nav-label">Booking</span>
+      </div>
+      <div class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+        <span class="nav-label">Profile</span>
+      </div>
+    </nav>
+
+    <button class="chat-pulse absolute bottom-20 right-5 z-50 rounded-full bg-sage-500 text-white flex items-center justify-center text-xl hover:bg-sage-600 hover:scale-105 active:scale-95 transition-all" style="width:52px;height:52px;" aria-label="Chat">💬</button>
+  </div>
+
+  <script>
+    const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const today=new Date();
+    const track=document.getElementById('date-track');
+    document.getElementById('month-label').textContent=months[today.getMonth()]+' '+today.getFullYear();
+    let selDate=null,selTime=null;
+
+    for(let i=0;i<14;i++){
+      const d=new Date(today);d.setDate(today.getDate()+i);
+      const card=document.createElement('div');
+      card.className='date-card flex-shrink-0 w-14 flex flex-col items-center gap-1 py-3 px-1';
+      card.dataset.date=d.toDateString();
+      card.innerHTML=`<span class="date-day text-[10px] font-semibold text-sage-700/50">${days[d.getDay()]}</span><span class="date-num text-[17px] font-bold text-sage-900 leading-none">${d.getDate()}</span>${i===0?'<span class="w-1.5 h-1.5 rounded-full bg-sage-400"></span>':'<span class="w-1.5 h-1.5"></span>'}`;
+      card.addEventListener('click',()=>selectDate(card,d));
+      track.appendChild(card);
+      if(i===0)selectDate(card,d);
+    }
+
+    function selectDate(card,d){
+      document.querySelectorAll('.date-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');selDate=d;updateSummary();
+    }
+
+    const slots=[{l:'9:00 AM',a:true},{l:'10:00 AM',a:true},{l:'11:00 AM',a:false},{l:'12:00 PM',a:true},{l:'2:00 PM',a:true},{l:'3:00 PM',a:false},{l:'4:00 PM',a:true},{l:'5:00 PM',a:true},{l:'6:00 PM',a:true}];
+    const grid=document.getElementById('time-grid');
+    slots.forEach(s=>{
+      const btn=document.createElement('button');
+      btn.className=`time-slot py-2.5 text-[12px] font-semibold ${s.a?'text-sage-800':'disabled'}`;
+      btn.textContent=s.l;
+      if(!s.a)btn.classList.add('disabled');
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.time-slot').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');selTime=s.l;updateSummary();
+      });
+      grid.appendChild(btn);
+    });
+
+    function selectSession(el){
+      document.querySelectorAll('.session-opt').forEach(o=>{
+        o.classList.remove('selected','bg-sage-50');o.classList.add('bg-white');
+        const dot=o.querySelector('.opt-dot');
+        dot.style.background='';dot.style.boxShadow='';
+        dot.classList.add('border-2','border-sage-200');dot.classList.remove('bg-sage-500');
+      });
+      el.classList.add('selected','bg-sage-50');el.classList.remove('bg-white');
+      const dot=el.querySelector('.opt-dot');
+      dot.style.background='#4a8c47';dot.style.boxShadow='0 0 0 3px rgba(157,200,155,0.4)';
+      dot.classList.remove('border-2','border-sage-200');
+      document.getElementById('summary-type').textContent=el.querySelector('p.font-semibold').textContent;
+    }
+
+    function updateSummary(){
+      if(selDate)document.getElementById('summary-date').textContent=selDate.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+      document.getElementById('summary-time').textContent=selTime||'—';
+    }
+  </script>
+</body>
+</html>

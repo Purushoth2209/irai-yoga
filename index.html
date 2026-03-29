@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Irai Yoga – Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          sage: { 50:'#f2f7f2',100:'#e2efe2',200:'#c4dfc3',300:'#9dc89b',400:'#6daa6a',500:'#4a8c47',600:'#387035',700:'#2d5a2b',800:'#254924',900:'#1e3b1d' },
+          cream:{ 50:'#fdfcf8',100:'#faf7f0',200:'#f4ede0' },
+        },
+        fontFamily: {
+          serif: ['"Cormorant Garamond"','serif'],
+          sans:  ['"DM Sans"','sans-serif'],
+        },
+        boxShadow: {
+          'card':  '0 2px 16px 0 rgba(0,0,0,0.06), 0 1px 4px 0 rgba(0,0,0,0.04)',
+          'card-hover': '0 12px 32px -4px rgba(74,140,71,0.18), 0 4px 12px -2px rgba(0,0,0,0.08)',
+          'nav':   '0 -1px 0 0 #e2efe2, 0 -8px 32px 0 rgba(0,0,0,0.06)',
+          'btn':   '0 4px 16px -2px rgba(74,140,71,0.40)',
+        }
+      }}
+    }
+  </script>
+  <style>
+    *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:#e8ede8;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;}
+    h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;}
+
+    /* ── Phone shell ── */
+    .phone{
+      width:390px;min-width:390px;max-width:390px;
+      min-height:100vh;
+      background:#f2f7f2;
+      position:relative;
+      overflow:hidden;
+      display:flex;flex-direction:column;
+    }
+    @media(max-width:430px){
+      body{background:#f2f7f2;}
+      .phone{width:100vw;min-width:unset;max-width:100vw;}
+    }
+
+    /* ── Scrollable content ── */
+    .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;}
+    .scroll-area::-webkit-scrollbar{display:none;}
+    .scroll-area{scrollbar-width:none;}
+
+    /* ── Grain ── */
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      opacity:.5;}
+
+    /* ── Blobs ── */
+    .blob{position:fixed;border-radius:9999px;filter:blur(60px);pointer-events:none;z-index:0;}
+
+    /* ── Cards ── */
+    .card{background:#fff;border-radius:20px;box-shadow:0 2px 16px 0 rgba(0,0,0,0.06),0 1px 4px 0 rgba(0,0,0,0.04);border:1px solid rgba(196,223,195,0.4);}
+    .service-card{transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;}
+    .service-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px -4px rgba(74,140,71,0.18),0 4px 12px -2px rgba(0,0,0,0.08);}
+    .service-card:active{transform:scale(.97);}
+
+    /* ── Search ── */
+    .search-input:focus{outline:none;box-shadow:0 0 0 3px rgba(157,200,155,0.5);}
+
+    /* ── Scroll track ── */
+    .h-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory;}
+    .h-scroll::-webkit-scrollbar{display:none;}
+    .h-scroll{scrollbar-width:none;}
+    .snap-card{scroll-snap-align:start;}
+
+    /* ── Bottom nav ── */
+    .bottom-nav{
+      position:sticky;bottom:0;left:0;right:0;z-index:50;
+      height:68px;
+      background:rgba(255,255,255,0.96);
+      backdrop-filter:blur(20px);
+      border-top:1px solid #e2efe2;
+      box-shadow:0 -8px 32px 0 rgba(0,0,0,0.06);
+      display:flex;align-items:center;justify-content:space-around;
+      flex-shrink:0;
+    }
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 16px;cursor:pointer;transition:all .15s ease;}
+    .nav-item svg{transition:color .15s ease;}
+    .nav-label{font-size:10px;font-weight:500;letter-spacing:.02em;transition:color .15s ease;}
+    .nav-item.active .nav-label{color:#4a8c47;}
+    .nav-item.active svg{color:#4a8c47;}
+    .nav-item:not(.active) .nav-label{color:#9ca3af;}
+    .nav-item:not(.active) svg{color:#9ca3af;}
+
+    /* ── Chat pulse ── */
+    @keyframes pulse-ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.6);opacity:0}}
+    .chat-pulse::before{content:'';position:absolute;inset:0;border-radius:9999px;background:#4a8c47;animation:pulse-ring 2.2s ease-out infinite;}
+
+    /* ── Avatar ring ── */
+    .avatar-ring{background:linear-gradient(135deg,#9dc89b 0%,#4a8c47 100%);}
+
+    /* ── Fade up ── */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .5s ease both;}
+    .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+    .d4{animation-delay:.24s}.d5{animation-delay:.30s}.d6{animation-delay:.36s}
+
+    /* ── Section label ── */
+    .eyebrow{font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6daa6a;}
+  </style>
+</head>
+<body>
+  <div class="blob w-72 h-72 bg-sage-200 opacity-50 top-0 right-0 -translate-y-1/4 translate-x-1/4"></div>
+  <div class="blob w-56 h-56 bg-sage-100 opacity-60 bottom-32 left-0 -translate-x-1/3"></div>
+
+  <div class="phone relative z-10">
+    <div class="scroll-area">
+
+      <!-- ── HEADER ── -->
+      <header class="flex items-center justify-between px-6 pt-12 pb-5 fu">
+        <div>
+          <p class="eyebrow mb-1">Welcome back ✦</p>
+          <h1 class="text-[2.4rem] font-bold text-sage-900 leading-none tracking-tight">Irai <span class="text-sage-500 italic">Yoga</span></h1>
+        </div>
+        <div class="relative flex-shrink-0">
+          <div class="avatar-ring w-12 h-12 rounded-full p-[2px] shadow-lg">
+            <div class="w-full h-full rounded-full bg-cream-100 flex items-center justify-center">
+              <span class="text-sage-700 font-semibold text-sm">AK</span>
+            </div>
+          </div>
+          <span class="absolute bottom-0.5 right-0.5 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></span>
+        </div>
+      </header>
+
+      <!-- ── TAGLINE ── -->
+      <div class="px-6 mb-6 fu d1">
+        <p class="text-[13px] text-sage-700/70 leading-relaxed font-light max-w-[260px]">
+          Align your body, calm your mind, and heal through the wisdom of yoga therapy.
+        </p>
+      </div>
+
+      <!-- ── SEARCH ── -->
+      <div class="px-6 mb-8 fu d2">
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sage-400 pointer-events-none">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+          </span>
+          <input type="text" placeholder="Search yoga, therapy, doctors…"
+            class="search-input w-full pl-11 pr-20 py-3.5 rounded-2xl bg-white border border-sage-100 text-[13px] text-sage-900 placeholder-sage-400/70 shadow-card transition-all"/>
+          <button class="absolute right-2.5 top-1/2 -translate-y-1/2 bg-sage-500 text-white text-[11px] font-semibold px-3.5 py-2 rounded-xl hover:bg-sage-600 transition-colors shadow-btn">
+            Search
+          </button>
+        </div>
+      </div>
+
+      <!-- ── SERVICES ── -->
+      <section class="px-6 mb-10">
+        <div class="flex items-center justify-between mb-5 fu d3">
+          <h2 class="text-[1.5rem] font-semibold text-sage-900 leading-tight">Our Services</h2>
+          <a href="#" class="eyebrow hover:text-sage-600 transition-colors">View all →</a>
+        </div>
+        <div class="flex flex-col gap-3.5">
+
+          <a href="listing.html" class="service-card card block p-5 fu d3">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-sage-50 flex items-center justify-center text-2xl flex-shrink-0 border border-sage-100">🧘</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[1rem] font-semibold text-sage-900">Yoga Sessions</h3>
+                  <svg class="w-4 h-4 text-sage-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <p class="text-[12px] text-sage-700/60 mt-1 leading-relaxed">Personal & group sessions for every level.</p>
+                <div class="flex gap-1.5 mt-2.5">
+                  <span class="text-[10px] bg-sage-50 text-sage-600 border border-sage-100 px-2.5 py-1 rounded-full font-medium">Beginner</span>
+                  <span class="text-[10px] bg-sage-50 text-sage-600 border border-sage-100 px-2.5 py-1 rounded-full font-medium">Advanced</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="listing.html" class="service-card card block p-5 fu d4">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center text-2xl flex-shrink-0 border border-emerald-100">🌿</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[1rem] font-semibold text-sage-900">Therapy Sessions</h3>
+                  <svg class="w-4 h-4 text-sage-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <p class="text-[12px] text-sage-700/60 mt-1 leading-relaxed">Specialized treatments for healing & recovery.</p>
+                <div class="flex gap-1.5 mt-2.5">
+                  <span class="text-[10px] bg-emerald-50 text-emerald-600 border border-emerald-100 px-2.5 py-1 rounded-full font-medium">Therapeutic</span>
+                  <span class="text-[10px] bg-emerald-50 text-emerald-600 border border-emerald-100 px-2.5 py-1 rounded-full font-medium">Holistic</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <a href="listing.html" class="service-card card block p-5 fu d5">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center text-2xl flex-shrink-0 border border-teal-100">🩺</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[1rem] font-semibold text-sage-900">Doctor Consultation</h3>
+                  <svg class="w-4 h-4 text-sage-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </div>
+                <p class="text-[12px] text-sage-700/60 mt-1 leading-relaxed">Certified medical professionals, online or in-person.</p>
+                <div class="flex gap-1.5 mt-2.5">
+                  <span class="text-[10px] bg-teal-50 text-teal-600 border border-teal-100 px-2.5 py-1 rounded-full font-medium">Certified</span>
+                  <span class="text-[10px] bg-teal-50 text-teal-600 border border-teal-100 px-2.5 py-1 rounded-full font-medium">On-demand</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- ── POPULAR SESSIONS ── -->
+      <section class="mb-8 fu d6">
+        <div class="flex items-center justify-between px-6 mb-4">
+          <h2 class="text-[1.5rem] font-semibold text-sage-900 leading-tight">Popular Sessions</h2>
+          <a href="listing.html" class="eyebrow hover:text-sage-600 transition-colors">See all →</a>
+        </div>
+        <div class="h-scroll px-6">
+
+          <a href="listing.html" class="snap-card flex-shrink-0 w-44 card overflow-hidden block hover:shadow-card-hover transition-shadow">
+            <div class="h-28 bg-gradient-to-br from-sage-200 to-sage-400 flex items-center justify-center text-4xl">🌅</div>
+            <div class="p-3.5">
+              <p class="eyebrow mb-1">Morning</p>
+              <h4 class="text-[13px] font-semibold text-sage-900 leading-snug">Sunrise Flow</h4>
+              <p class="text-[11px] text-sage-700/50 mt-1">45 min · Beginner</p>
+            </div>
+          </a>
+
+          <a href="listing.html" class="snap-card flex-shrink-0 w-44 card overflow-hidden block hover:shadow-card-hover transition-shadow">
+            <div class="h-28 bg-gradient-to-br from-emerald-100 to-emerald-300 flex items-center justify-center text-4xl">🧘‍♀️</div>
+            <div class="p-3.5">
+              <p class="eyebrow mb-1" style="color:#059669">Therapy</p>
+              <h4 class="text-[13px] font-semibold text-sage-900 leading-snug">Spine Restore</h4>
+              <p class="text-[11px] text-sage-700/50 mt-1">60 min · All levels</p>
+            </div>
+          </a>
+
+          <a href="listing.html" class="snap-card flex-shrink-0 w-44 card overflow-hidden block hover:shadow-card-hover transition-shadow">
+            <div class="h-28 bg-gradient-to-br from-teal-100 to-teal-300 flex items-center justify-center text-4xl">🌙</div>
+            <div class="p-3.5">
+              <p class="eyebrow mb-1" style="color:#0d9488">Evening</p>
+              <h4 class="text-[13px] font-semibold text-sage-900 leading-snug">Night Wind Down</h4>
+              <p class="text-[11px] text-sage-700/50 mt-1">30 min · Relaxing</p>
+            </div>
+          </a>
+
+          <a href="listing.html" class="snap-card flex-shrink-0 w-44 card overflow-hidden block hover:shadow-card-hover transition-shadow">
+            <div class="h-28 bg-gradient-to-br from-lime-100 to-lime-300 flex items-center justify-center text-4xl">🌿</div>
+            <div class="p-3.5">
+              <p class="eyebrow mb-1" style="color:#65a30d">Wellness</p>
+              <h4 class="text-[13px] font-semibold text-sage-900 leading-snug">Breath & Balance</h4>
+              <p class="text-[11px] text-sage-700/50 mt-1">50 min · Intermediate</p>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+    </div><!-- /scroll-area -->
+
+    <!-- ── BOTTOM NAV ── -->
+    <nav class="bottom-nav">
+      <div class="nav-item active">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="nav-label">Home</span>
+      </div>
+      <a href="listing.html" class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="3"/><path stroke-linecap="round" d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <span class="nav-label">Sessions</span>
+      </a>
+      <div class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="nav-label">Saved</span>
+      </div>
+      <div class="nav-item">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+        <span class="nav-label">Profile</span>
+      </div>
+    </nav>
+
+    <!-- ── CHAT FAB ── -->
+    <button class="chat-pulse absolute bottom-20 right-5 z-50 w-13 h-13 rounded-full bg-sage-500 text-white shadow-btn flex items-center justify-center text-xl hover:bg-sage-600 hover:scale-105 active:scale-95 transition-all" style="width:52px;height:52px;" aria-label="Chat">💬</button>
+
+  </div><!-- /phone -->
+</body>
+</html>
