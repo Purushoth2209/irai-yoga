@@ -27,8 +27,8 @@ function MainLayout({ children, user }: { children: React.ReactNode, user: UserT
   const showNav = user && user.onboarded && !noNavPaths.includes(location.pathname);
 
   return (
-    <div className="min-h-screen bg-[#F5F7F2]/30 flex items-center justify-center p-4">
-      <div className="max-w-[375px] w-full h-[812px] bg-white shadow-[0_0_100px_rgba(0,0,0,0.05)] relative overflow-hidden rounded-[40px] border-[12px] border-slate flex flex-col">
+    <div className="min-h-screen bg-white md:bg-[#F5F7F2]/30 md:flex md:items-center md:justify-center md:p-4">
+      <div className="w-full min-h-screen md:min-h-0 md:max-w-[375px] md:h-[812px] md:rounded-[40px] md:shadow-[0_0_100px_rgba(0,0,0,0.05)] bg-white relative overflow-hidden flex flex-col">
         <motion.main
           key={location.pathname}
           initial={{ opacity: 0 }}
