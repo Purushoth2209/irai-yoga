@@ -21,6 +21,7 @@ import Sessions from './pages/Sessions';
 import AIInsights from './pages/AIInsights';
 import Profile from './pages/Profile';
 import GroupSessions from './pages/GroupSessions';
+import HealthVault from './pages/HealthVault';
 
 function MainLayout({ children, user }: { children: React.ReactNode, user: UserType | null }) {
   const location = useLocation();
@@ -123,6 +124,7 @@ export default function App() {
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/insights" element={<AIInsights />} />
           <Route path="/profile" element={<Profile user={user} onLogout={() => setUser(null)} />} />
+          <Route path="/health-vault" element={<HealthVault user={user} />} />
         </Routes>
       </MainLayout>
     </Router>

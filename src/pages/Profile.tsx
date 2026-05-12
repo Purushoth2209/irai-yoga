@@ -68,7 +68,7 @@ export default function Profile({ user, onLogout }: { user: User | null, onLogou
 
         <section className="bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden">
           <MenuButton icon={CreditCard} label="Enrollment & Billing" />
-          <MenuButton icon={FileText} label="Health Vault" />
+          <MenuButton icon={FileText} label="Health Vault" onClick={() => navigate('/health-vault')} />
           <MenuButton icon={Shield} label="Privacy" last />
         </section>
 
@@ -92,13 +92,16 @@ export default function Profile({ user, onLogout }: { user: User | null, onLogou
   );
 }
 
-function MenuButton({ icon: Icon, label, last, className }: any) {
+function MenuButton({ icon: Icon, label, last, className, onClick }: any) {
   return (
-    <button className={cn(
-      "w-full flex items-center justify-between px-6 py-5 transition-colors group",
-      !last && "border-b border-brand-border",
-      className
-    )}>
+    <button
+      onClick={onClick}
+      className={cn(
+        "w-full flex items-center justify-between px-6 py-5 transition-colors group",
+        !last && "border-b border-brand-border",
+        className
+      )}
+    >
       <div className="flex items-center gap-4">
         <div className="w-8 h-8 rounded-lg bg-[#f5f7f2] border border-brand-border flex items-center justify-center text-forest transition-colors group-hover:bg-forest group-hover:text-white">
           <Icon size={16} />

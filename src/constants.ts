@@ -146,6 +146,27 @@ export const MOCK_SESSIONS: Session[] = [
   },
 ];
 
+export interface HealthSummary {
+  diagnoses: string[];
+  medications: { name: string; dosage: string }[];
+  labValues: { test: string; value: string; status: 'normal' | 'low' | 'high' }[];
+  safePoses: string[];
+  avoidPoses: string[];
+  contraindications: string[];
+  imagingFindings: string;
+  recommendations: string[];
+  extractedAt: string;
+}
+
+export interface HealthDocument {
+  id: string;
+  name: string;
+  size: number;
+  uploadedAt: string;
+  status: 'processing' | 'done' | 'error';
+  summary?: HealthSummary;
+}
+
 export interface GroupSession {
   id: string;
   title: string;
