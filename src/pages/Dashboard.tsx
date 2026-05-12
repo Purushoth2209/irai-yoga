@@ -233,7 +233,7 @@ export default function Dashboard({ user }: { user: User }) {
               See All <ChevronRight size={11} />
             </button>
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar -mx-5 px-5">
+          <div className="grid grid-cols-2 gap-2.5">
             {GROUP_SESSIONS.slice(0, 4).map((gs) => {
               const Icon = gs.category === 'breathwork' ? Wind
                 : gs.category === 'meditation' ? Leaf
@@ -243,26 +243,25 @@ export default function Dashboard({ user }: { user: User }) {
                 <button
                   key={gs.id}
                   onClick={() => navigate('/group-sessions')}
-                  className="min-w-[152px] bg-white rounded-2xl border border-brand-border shadow-sm flex flex-col gap-3 active:scale-[0.97] transition-all text-left shrink-0 overflow-hidden"
+                  className="bg-white rounded-2xl border border-brand-border shadow-sm flex flex-col gap-2.5 active:scale-[0.97] transition-all text-left overflow-hidden"
                 >
-                  {/* Colored top strip */}
-                  <div className="h-[3px] bg-gradient-to-r from-forest/60 to-forest/20" />
-                  <div className="px-4 pb-4 flex flex-col gap-2.5">
+                  <div className="h-[3px] bg-gradient-to-r from-forest/50 to-forest/10" />
+                  <div className="px-3.5 pb-3.5 flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                      <div className="w-8 h-8 bg-[#f0f4ee] rounded-lg flex items-center justify-center text-forest">
-                        <Icon size={14} />
+                      <div className="w-7 h-7 bg-[#f0f4ee] rounded-lg flex items-center justify-center text-forest">
+                        <Icon size={13} />
                       </div>
                       <span className="text-[6px] font-bold uppercase tracking-widest text-gray-400 bg-brand-50 px-1.5 py-0.5 rounded-full border border-brand-border">
                         {gs.level}
                       </span>
                     </div>
                     <div>
-                      <h4 className="font-bold text-slate text-[10px] uppercase tracking-tight leading-snug mb-0.5">{gs.title}</h4>
-                      <p className="small-caps text-[6.5px] text-gray-400">{gs.days.slice(0, 3).join(' · ')}</p>
+                      <h4 className="font-bold text-slate text-[10px] uppercase tracking-tight leading-tight mb-0.5">{gs.title}</h4>
+                      <p className="small-caps text-[6px] text-gray-400">{gs.days.slice(0, 3).join(' · ')}</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Clock size={9} className="text-gray-300" />
-                      <span className="small-caps text-[6.5px] text-forest">{gs.time}</span>
+                      <Clock size={8} className="text-gray-300" />
+                      <span className="small-caps text-[6px] text-forest">{gs.time}</span>
                     </div>
                   </div>
                 </button>
@@ -330,18 +329,26 @@ export default function Dashboard({ user }: { user: User }) {
 
         {/* ── Daily Observances ── */}
         <section>
-          <h2 className="serif text-xl text-slate mb-3 px-0.5">Daily Observances</h2>
-          <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar -mx-5 px-5">
+          <div className="flex items-center justify-between mb-3 px-0.5">
+            <h2 className="serif text-xl text-slate">Daily Observances</h2>
+            <div className="flex items-center gap-1.5">
+              <Sparkles size={11} className="text-forest" />
+              <span className="small-caps text-[7px] text-forest">AI Generated</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden">
             {MOCK_AI_DATA.insights.map((insight, idx) => (
               <div
                 key={idx}
-                className="min-w-[220px] bg-white rounded-2xl border border-brand-border shadow-sm shrink-0 overflow-hidden"
+                className={cn(
+                  'flex items-start gap-3 px-4 py-3.5',
+                  idx < MOCK_AI_DATA.insights.length - 1 && 'border-b border-brand-border',
+                )}
               >
-                <div className="h-[3px] bg-gradient-to-r from-[#4a6741]/40 to-transparent" />
-                <div className="p-4">
-                  <span className="serif text-[42px] text-forest/10 leading-none select-none block -mb-2">"</span>
-                  <p className="text-[11px] text-slate/70 leading-relaxed font-medium">{insight}</p>
+                <div className="w-5 h-5 rounded-full bg-[#f0f4ee] border border-forest/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="text-[8px] font-bold text-forest">{idx + 1}</span>
                 </div>
+                <p className="text-[11px] text-slate/75 leading-relaxed font-medium flex-1">{insight}</p>
               </div>
             ))}
           </div>
