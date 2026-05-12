@@ -1,28 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@300;400;600&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Cormorant Garamond", serif;
-  
-  --color-forest: #4A6741;
-  --color-cream: #FDFCF9;
-  --color-terracotta: #E8A87C;
-  --color-slate: #2D3436;
+
+  --color-forest: #4a6741;
+  --color-cream: #fdfcf9;
+  --color-terracotta: #e8a87c;
+  --color-slate: #2d3436;
   --color-brand-border: rgba(74, 103, 65, 0.15);
-  
+
   /* Retain brand mapping for compatibility */
   --color-brand-50: var(--color-cream);
   --color-brand-100: #f5f7f2;
   --color-brand-200: var(--color-brand-border);
   --color-brand-500: var(--color-forest);
-  --color-brand-600: #3D5535;
+  --color-brand-600: #3d5535;
   --color-brand-900: var(--color-slate);
 }
 
 body {
   @apply bg-cream text-slate font-sans;
-  background: radial-gradient(circle at top left, #f5f7f2 0%, #FDFCF9 100%);
+  background: radial-gradient(circle at top left, #f5f7f2 0%, #fdfcf9 100%);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -38,3 +38,21 @@ body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* ── Custom scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(45, 52, 54, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 52, 54, 0.5);
+}
