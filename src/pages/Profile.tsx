@@ -4,21 +4,24 @@
  */
 
 import { motion } from 'motion/react';
-import { 
-  User as UserIcon, 
-  CreditCard, 
-  Shield, 
-  Settings, 
-  LogOut, 
+import {
+  User as UserIcon,
+  CreditCard,
+  Shield,
+  Settings,
+  LogOut,
   FileText,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  CalendarDays,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { User, PLANS } from '../constants';
 import { cn } from '../lib/utils';
 
 export default function Profile({ user, onLogout }: { user: User | null, onLogout: () => void }) {
   if (!user) return null;
+  const navigate = useNavigate();
   const plan = PLANS.find(p => p.id === user.planId);
 
   return (
@@ -46,9 +49,26 @@ export default function Profile({ user, onLogout }: { user: User | null, onLogou
 
       {/* Menu Sections */}
       <div className="space-y-6">
+        {/* Session Calendar */}
+        <button
+          onClick={() => navigate('/sessions')}
+          className="w-full bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden flex items-center justify-between px-6 py-5 transition-all hover:border-forest/30 active:scale-[0.98] group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-[#f0f4ee] border border-forest/20 flex items-center justify-center text-forest transition-colors group-hover:bg-forest group-hover:text-white">
+              <CalendarDays size={18} />
+            </div>
+            <div className="text-left">
+              <span className="block small-caps text-[10px] text-slate">My Sessions</span>
+              <span className="block small-caps text-[8px] text-gray-400 mt-0.5">Calendar & booking history</span>
+            </div>
+          </div>
+          <ChevronRight size={14} className="text-gray-300 group-hover:text-forest transition-colors" />
+        </button>
+
         <section className="bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden">
           <MenuButton icon={CreditCard} label="Enrollment & Billing" />
-          <MenuButton icon={FileText} label="Health Vault" />
+          <MenuButton icon={FileText} label="Health Vault" onClick={() => navigate('/health-vault')} />
           <MenuButton icon={Shield} label="Privacy" last />
         </section>
 
@@ -72,13 +92,16 @@ export default function Profile({ user, onLogout }: { user: User | null, onLogou
   );
 }
 
-function MenuButton({ icon: Icon, label, last, className }: any) {
+function MenuButton({ icon: Icon, label, last, className, onClick }: any) {
   return (
-    <button className={cn(
-      "w-full flex items-center justify-between px-6 py-5 transition-colors group",
-      !last && "border-b border-brand-border",
-      className
-    )}>
+    <button
+      onClick={onClick}
+      className={cn(
+        "w-full flex items-center justify-between px-6 py-5 transition-colors group",
+        !last && "border-b border-brand-border",
+        className
+      )}
+    >
       <div className="flex items-center gap-4">
         <div className="w-8 h-8 rounded-lg bg-[#f5f7f2] border border-brand-border flex items-center justify-center text-forest transition-colors group-hover:bg-forest group-hover:text-white">
           <Icon size={16} />
