@@ -72,7 +72,6 @@ export default function GroupSessions() {
     if (!selected) return;
     setJoined(prev => [...prev, selected.id]);
     setStep('success');
-    setTimeout(() => navigate('/sessions'), 2500);
   };
 
   return (
@@ -318,28 +317,51 @@ export default function GroupSessions() {
         )}
 
         {/* ── Success ── */}
-        {step === 'success' && (
+        {step === 'success' && selected && (
           <motion.div
             key="success"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center py-20 text-center px-8"
+            className="flex flex-col items-center justify-center py-16 text-center px-8 gap-6"
           >
-            <div className="w-20 h-20 bg-forest text-white rounded-full flex items-center justify-center mb-8 shadow-2xl relative">
-              <CheckCircle2 size={40} className="relative z-10" />
+            <div className="relative w-20 h-20">
               <motion.div
-                initial={{ scale: 1, opacity: 0.5 }}
-                animate={{ scale: 1.8, opacity: 0 }}
-                transition={{ repeat: Infinity, duration: 2 }}
+                initial={{ scale: 1, opacity: 0.4 }}
+                animate={{ scale: 1.9, opacity: 0 }}
+                transition={{ repeat: Infinity, duration: 2.2, ease: 'easeOut' }}
                 className="absolute inset-0 bg-forest rounded-full"
               />
+              <div className="w-20 h-20 bg-forest text-white rounded-full flex items-center justify-center shadow-xl shadow-forest/25 relative z-10">
+                <CheckCircle2 size={36} />
+              </div>
             </div>
-            <h3 className="serif text-3xl mb-2">You're In!</h3>
-            <p className="text-gray-400 text-xs max-w-xs mx-auto mb-8 leading-relaxed">
-              <strong>{selected?.title}</strong> has been added to your session calendar.
-            </p>
-            <div className="small-caps text-[8px] bg-[#f5f7f2] border border-brand-border px-4 py-2 rounded-full inline-block">
+
+            <div>
+              <h3 className="serif text-3xl mb-1.5">You're In!</h3>
+              <p className="text-gray-400 text-[12px] max-w-[240px] mx-auto leading-relaxed">
+                <strong>{selected.title}</strong> has been added to your calendar.
+              </p>
+            </div>
+
+            <div className="small-caps text-[8px] bg-[#f5f7f2] border border-brand-border px-4 py-2 rounded-full">
               Added to Calendar · Reminder Set
+            </div>
+
+            <div className="w-full space-y-2.5 mt-2">
+              <button
+                onClick={() =>
+                  navigate('/session-room?id=' + selected.id + '&type=group')
+                }
+                className="w-full bg-forest text-white py-4 rounded-xl font-bold flex justify-center items-center gap-2 shadow-lg shadow-forest/20 text-sm"
+              >
+                Enter Session Room <ChevronRight size={17} />
+              </button>
+              <button
+                onClick={() => navigate('/sessions')}
+                className="w-full bg-white border border-brand-border text-slate py-4 rounded-xl font-bold text-sm"
+              >
+                View Calendar
+              </button>
             </div>
           </motion.div>
         )}

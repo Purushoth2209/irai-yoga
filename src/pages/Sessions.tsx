@@ -288,8 +288,12 @@ export default function Sessions() {
 }
 
 function SessionCard({ session }: { session: Session; key?: string }) {
+  const navigate = useNavigate();
   const Icon = SESSION_ICON[session.type] ?? Users;
   const dot = SESSION_DOT[session.type] ?? 'bg-gray-300';
+  const isYogaUpcoming =
+    session.status === 'upcoming' &&
+    (session.type === 'yoga-1on1' || session.type === 'yoga-group');
 
   return (
     <div className="bg-white p-4 rounded-2xl border border-brand-border shadow-sm">
@@ -319,14 +323,30 @@ function SessionCard({ session }: { session: Session; key?: string }) {
             <span className="small-caps text-[7px] text-forest">{session.time}</span>
           </div>
         </div>
-        <span
-          className={cn(
-            'small-caps text-[7px] px-2 py-0.5 rounded-full border',
-            STATUS_STYLE[session.status] ?? STATUS_STYLE.upcoming,
-          )}
-        >
-          {session.status}
-        </span>
+        {isYogaUpcoming ? (
+          <button
+            onClick={() =>
+              navigate(
+                '/session-room?id=' +
+                  session.id +
+                  '&type=' +
+                  (session.type === 'yoga-group' ? 'group' : 'personal'),
+              )
+            }
+            className="small-caps text-[7px] px-3 py-1 rounded-full border bg-forest text-white border-forest/30 transition-all active:scale-95"
+          >
+            Join
+          </button>
+        ) : (
+          <span
+            className={cn(
+              'small-caps text-[7px] px-2 py-0.5 rounded-full border',
+              STATUS_STYLE[session.status] ?? STATUS_STYLE.upcoming,
+            )}
+          >
+            {session.status}
+          </span>
+        )}
       </div>
     </div>
   );
