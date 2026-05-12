@@ -386,7 +386,7 @@ export default function AIInsights() {
         <section className="bg-white rounded-[2rem] border border-brand-border shadow-sm overflow-hidden">
           <div className="flex items-center gap-2.5 px-5 py-4 border-b border-brand-border">
             <Sparkles size={13} className="text-forest" />
-            <h3 className="small-caps text-[9px]">Log Previous Session</h3>
+            <h3 className="small-caps text-[9px]">Log This Session</h3>
           </div>
 
           {logSaved ? (

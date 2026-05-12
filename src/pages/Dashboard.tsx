@@ -65,10 +65,16 @@ export default function Dashboard({ user }: { user: User }) {
 
       <div className="p-6 space-y-10 mt-2">
         {/* AI Insight banner */}
-        <div className="bg-terracotta text-white p-4 rounded-2xl text-[12px] leading-snug flex gap-3 shadow-lg shadow-terracotta/20 animate-in fade-in slide-in-from-top-4">
-           <Brain size={20} className="shrink-0" />
-           <p><strong>AI Insight:</strong> Your consistency is improving. A 20-min session today helps maintain your streak.</p>
-        </div>
+        <button
+          onClick={() => navigate('/insights')}
+          className="w-full bg-terracotta text-white p-4 rounded-2xl text-[12px] leading-snug flex gap-3 shadow-lg shadow-terracotta/20 animate-in fade-in slide-in-from-top-4 active:scale-[0.98] transition-all text-left"
+        >
+          <Brain size={20} className="shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p><strong>AI Insight:</strong> Your consistency is improving. A 20-min session today helps maintain your streak.</p>
+          </div>
+          <ChevronRight size={16} className="shrink-0 mt-0.5 opacity-70" />
+        </button>
 
         {/* Action Grid */}
         <section className="grid grid-cols-4 gap-4 px-2">
@@ -154,28 +160,6 @@ export default function Dashboard({ user }: { user: User }) {
                 </div>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* AI Recommendation Card */}
-        <section>
-          <div className="bg-slate rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-xl shadow-slate/20">
-             <div className="relative z-10">
-               <div className="flex items-center gap-2 mb-4">
-                 <div className="bg-forest/20 p-2 rounded-lg">
-                   <Sparkles size={16} className="text-forest" />
-                 </div>
-                 <span className="small-caps text-[9px] text-white/60">AI Recommendation</span>
-               </div>
-               <h3 className="serif text-2xl mb-2">{MOCK_AI_DATA.recommendations[0].title}</h3>
-               <p className="text-cream/70 text-xs leading-relaxed font-light mb-6">
-                 {MOCK_AI_DATA.recommendations[0].description}
-               </p>
-               <button className="bg-forest w-full py-4 rounded-xl font-bold text-sm shadow-lg shadow-forest/20 active:scale-95 transition-transform">
-                 Learn More
-               </button>
-             </div>
-             <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-forest/10 rounded-full blur-[40px]" />
           </div>
         </section>
 
