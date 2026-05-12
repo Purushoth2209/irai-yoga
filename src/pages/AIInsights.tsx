@@ -16,13 +16,11 @@ import {
   XAxis,
 } from "recharts";
 import {
-  Sparkles,
   TrendingUp,
   Brain,
   ChevronLeft,
   ChevronRight,
   Zap,
-  CheckCircle2,
 } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -95,31 +93,12 @@ function zoneStyle(val: number): { bar: string; text: string } {
 
 export default function AIInsights() {
   const [noteIdx, setNoteIdx] = useState(0);
-  const [painBefore, setPainBefore] = useState<number | null>(null);
-  const [painAfter, setPainAfter] = useState<number | null>(null);
-  const [presence, setPresence] = useState<number | null>(null);
-  const [logSaved, setLogSaved] = useState(false);
 
   const score = WELLNESS_SCORE;
   const color = ringColor(score);
   const rank = rankInfo(score);
   const circumference = 502.4;
   const dashOffset = circumference * (1 - score / 100);
-
-  function saveLog() {
-    if (painBefore === null || painAfter === null || presence === null) return;
-    const existing = JSON.parse(
-      localStorage.getItem("irai_session_logs") || "[]",
-    );
-    existing.push({
-      date: new Date().toISOString(),
-      painBefore,
-      painAfter,
-      presence,
-    });
-    localStorage.setItem("irai_session_logs", JSON.stringify(existing));
-    setLogSaved(true);
-  }
 
   return (
     <div className="p-5 pb-24 bg-brand-50 min-h-full">
@@ -380,144 +359,6 @@ export default function AIInsights() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </section>
-
-        {/* ── Session Logger ── */}
-        <section className="bg-white rounded-[2rem] border border-brand-border shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2.5 px-5 py-4 border-b border-brand-border">
-            <Sparkles size={13} className="text-forest" />
-            <h3 className="small-caps text-[9px]">Log This Session</h3>
-          </div>
-
-          {logSaved ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center justify-center py-10 gap-2.5"
-            >
-              <div className="w-10 h-10 bg-[#f0f4ee] rounded-full flex items-center justify-center text-forest">
-                <CheckCircle2 size={20} />
-              </div>
-              <p className="small-caps text-[9px] text-forest">Log Saved</p>
-              <p className="small-caps text-[7px] text-gray-400">
-                Pain and presence data recorded
-              </p>
-            </motion.div>
-          ) : (
-            <div className="p-5 space-y-5">
-              {/* Pain Before */}
-              <div>
-                <p className="small-caps text-[8px] text-gray-400 mb-2.5">
-                  Pain Score — Before
-                </p>
-                <div className="flex gap-1">
-                  {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-                    <button
-                      key={n}
-                      onClick={() => setPainBefore(n)}
-                      className={cn(
-                        "flex-1 h-7 rounded-lg text-[9px] font-bold border transition-all",
-                        painBefore === n
-                          ? "bg-slate text-white border-slate"
-                          : "bg-[#f5f7f2] text-gray-300 border-brand-border hover:border-gray-300",
-                      )}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Pain After */}
-              <div>
-                <p className="small-caps text-[8px] text-gray-400 mb-2.5">
-                  Pain Score — After
-                </p>
-                <div className="flex gap-1">
-                  {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-                    <button
-                      key={n}
-                      onClick={() => setPainAfter(n)}
-                      className={cn(
-                        "flex-1 h-7 rounded-lg text-[9px] font-bold border transition-all",
-                        painAfter === n
-                          ? n <= 3
-                            ? "bg-forest text-white border-forest"
-                            : n <= 6
-                              ? "bg-amber-400 text-white border-amber-400"
-                              : "bg-red-400 text-white border-red-400"
-                          : "bg-[#f5f7f2] text-gray-300 border-brand-border hover:border-gray-300",
-                      )}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex justify-between mt-1">
-                  <span className="small-caps text-[6px] text-forest">
-                    No pain
-                  </span>
-                  <span className="small-caps text-[6px] text-red-400">
-                    Severe
-                  </span>
-                </div>
-              </div>
-
-              {/* Presence */}
-              <div>
-                <p className="small-caps text-[8px] text-gray-400 mb-2.5">
-                  How present were you?
-                </p>
-                <div className="flex gap-1.5">
-                  {[
-                    { val: 1, label: "Distracted" },
-                    { val: 2, label: "Scattered" },
-                    { val: 3, label: "Present" },
-                    { val: 4, label: "Focused" },
-                    { val: 5, label: "Flow" },
-                  ].map(({ val, label }) => (
-                    <button
-                      key={val}
-                      onClick={() => setPresence(val)}
-                      className={cn(
-                        "flex-1 py-2.5 rounded-xl border transition-all flex flex-col items-center gap-0.5",
-                        presence === val
-                          ? "bg-forest text-white border-forest shadow-md shadow-forest/20"
-                          : "bg-[#f5f7f2] border-brand-border",
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          "text-[12px] font-bold",
-                          presence === val ? "text-white" : "text-gray-400",
-                        )}
-                      >
-                        {val}
-                      </span>
-                      <span
-                        className={cn(
-                          "text-[5.5px] font-bold uppercase tracking-wide leading-none",
-                          presence === val ? "text-white/70" : "text-gray-300",
-                        )}
-                      >
-                        {label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={saveLog}
-                disabled={
-                  painBefore === null || painAfter === null || presence === null
-                }
-                className="w-full bg-forest text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-forest/20 disabled:opacity-35 disabled:shadow-none transition-all"
-              >
-                Save Log
-              </button>
-            </div>
-          )}
         </section>
 
         {/* ── AI Coaching Note ── */}
