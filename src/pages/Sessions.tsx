@@ -333,7 +333,7 @@ function SessionCard({ session }: { session: Session; key?: string }) {
                   (session.type === 'yoga-group' ? 'group' : 'personal'),
               )
             }
-            className="small-caps text-[7px] px-3 py-1 rounded-full border bg-forest text-white border-forest/30 transition-all active:scale-95"
+            className="px-4 py-1.5 rounded-full bg-forest border border-forest/20 text-[9px] font-bold uppercase tracking-widest text-white transition-all active:scale-95"
           >
             Join
           </button>
