@@ -3,48 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GoogleGenAI } from '@google/genai';
 import type { HealthSummary } from '../constants';
-
-const API_KEY =
-  (import.meta as any).env?.VITE_GEMINI_API_KEY ??
-  (import.meta as any).env?.GEMINI_API_KEY ??
-  '';
-
-const EXTRACTION_PROMPT = `You are a clinical medical AI assistant for a yoga therapy platform.
-Analyse this medical document and extract all relevant information.
-Return ONLY a valid JSON object — no markdown fences, no explanation, nothing else.
-
-Schema:
-{
-  "diagnoses": ["full condition name with any severity or location details"],
-  "medications": [{ "name": "drug name", "dosage": "dose and frequency" }],
-  "labValues": [{ "test": "test name", "value": "result with unit", "status": "normal" | "low" | "high" }],
-  "safePoses": ["yoga pose name safe for this patient given their condition"],
-  "avoidPoses": ["yoga pose name that could worsen this patient's condition"],
-  "contraindications": ["specific movement, posture, or activity to avoid"],
-  "imagingFindings": "plain-language summary of any imaging (MRI/X-ray/CT) results, or empty string if none",
-  "recommendations": ["clinical recommendation, lifestyle note, or doctor instruction"]
-}
-
-Rules:
-- Infer safePoses and avoidPoses from the diagnosis even if not explicitly stated in the document
-  (e.g. disc herniation → avoid forward folds, spinal twists, inversions; safe: shavasana, cat-cow)
-- Mark lab values as high/low only if outside reference ranges
-- If this is not a medical document return all empty arrays and an empty string for imagingFindings
-- Do NOT include markdown, code fences, or any text outside the JSON object`;
-
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      resolve(result.split(',')[1]);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
 
 function demoSummary(): HealthSummary {
   return {
@@ -79,37 +38,9 @@ function demoSummary(): HealthSummary {
   };
 }
 
-export async function analyzeDocument(file: File): Promise<HealthSummary> {
-  if (!API_KEY) {
-    // No key configured — return realistic demo data
-    await new Promise(r => setTimeout(r, 2200)); // simulate latency
-    return demoSummary();
-  }
-
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
-  const base64 = await fileToBase64(file);
-
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
-    contents: [
-      {
-        parts: [
-          { inlineData: { mimeType: file.type as any, data: base64 } },
-          { text: EXTRACTION_PROMPT },
-        ],
-      },
-    ],
-  });
-
-  const raw = response.candidates?.[0]?.content?.parts?.[0]?.text ?? '{}';
-
-  try {
-    const parsed = JSON.parse(raw.trim());
-    return { ...parsed, extractedAt: new Date().toISOString() };
-  } catch {
-    // Malformed JSON — fall back to demo
-    return demoSummary();
-  }
+export async function analyzeDocument(_file: File): Promise<HealthSummary> {
+  await new Promise(r => setTimeout(r, 2200));
+  return demoSummary();
 }
 
-export const isDemoMode = !API_KEY;
+export const isDemoMode = true;
