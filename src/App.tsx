@@ -20,6 +20,7 @@ import Booking from './pages/Booking';
 import Sessions from './pages/Sessions';
 import AIInsights from './pages/AIInsights';
 import Profile from './pages/Profile';
+import GroupSessions from './pages/GroupSessions';
 
 function MainLayout({ children, user }: { children: React.ReactNode, user: UserType | null }) {
   const location = useLocation();
@@ -118,6 +119,7 @@ export default function App() {
             element={user?.onboarded ? <Dashboard user={user} /> : <Navigate to={user ? (user.planId ? "/onboarding" : "/pricing") : "/auth"} />} 
           />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/group-sessions" element={<GroupSessions />} />
           <Route path="/sessions" element={<Sessions />} />
           <Route path="/insights" element={<AIInsights />} />
           <Route path="/profile" element={<Profile user={user} onLogout={() => setUser(null)} />} />

@@ -4,22 +4,25 @@
  */
 
 import { motion } from 'motion/react';
-import { 
-  Calendar, 
-  Activity, 
-  Flame, 
-  Trophy, 
-  ChevronRight, 
-  PlayCircle, 
-  PlusCircle, 
-  Users, 
-  Stethoscope, 
-  Apple, 
+import {
+  Calendar,
+  Activity,
+  Flame,
+  Trophy,
+  ChevronRight,
+  PlayCircle,
+  PlusCircle,
+  Users,
+  Stethoscope,
+  Apple,
   Brain,
-  History
+  History,
+  Clock,
+  Wind,
+  Leaf,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { User, MOCK_SESSIONS, MOCK_AI_DATA, PLANS } from '../constants';
+import { User, MOCK_SESSIONS, MOCK_AI_DATA, PLANS, GROUP_SESSIONS } from '../constants';
 import { cn } from '../lib/utils';
 
 export default function Dashboard({ user }: { user: User }) {
@@ -86,6 +89,43 @@ export default function Dashboard({ user }: { user: User }) {
               <span className="small-caps text-[8px] transition-colors group-hover:text-forest">{item.label}</span>
             </button>
           ))}
+        </section>
+
+        {/* Group Sessions Strip */}
+        <section>
+          <div className="flex justify-between items-end mb-4 px-2">
+            <h2 className="serif text-xl">Group Sessions</h2>
+            <button onClick={() => navigate('/group-sessions')} className="small-caps text-forest hover:underline">See All</button>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar -mx-6 px-6">
+            {GROUP_SESSIONS.slice(0, 4).map((gs) => {
+              const Icon = gs.category === 'breathwork' ? Wind : gs.category === 'meditation' ? Leaf : gs.category === 'mobility' ? Activity : Users;
+              return (
+                <button
+                  key={gs.id}
+                  onClick={() => navigate('/group-sessions')}
+                  className="min-w-[160px] bg-white p-4 rounded-2xl border border-brand-border shadow-sm flex flex-col gap-3 active:scale-[0.97] transition-all text-left"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <div className="w-8 h-8 bg-[#f5f7f2] border border-brand-border rounded-lg flex items-center justify-center text-forest">
+                      <Icon size={15} />
+                    </div>
+                    <span className="text-[7px] font-bold uppercase tracking-widest text-gray-400 bg-[#f5f7f2] px-2 py-0.5 rounded-full border border-brand-border">
+                      {gs.level}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate text-[11px] uppercase tracking-tight leading-snug mb-0.5">{gs.title}</h4>
+                    <p className="small-caps text-[7px] text-gray-400">{gs.days.slice(0, 3).join(' · ')}</p>
+                  </div>
+                  <div className="flex items-center gap-1 mt-auto">
+                    <Clock size={10} className="text-gray-300" />
+                    <span className="small-caps text-[7px] text-forest">{gs.time}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </section>
 
         {/* Sessions Section */}

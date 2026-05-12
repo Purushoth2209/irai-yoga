@@ -102,6 +102,106 @@ export const MOCK_SESSIONS: Session[] = [
   }
 ];
 
+export interface GroupSession {
+  id: string;
+  title: string;
+  category: 'yoga' | 'breathwork' | 'meditation' | 'mobility';
+  instructor: string;
+  instructorTitle: string;
+  days: string[];
+  time: string;
+  duration: number;
+  level: 'Beginner' | 'Intermediate' | 'Advanced';
+  capacity: number;
+  enrolled: number;
+  description: string;
+  planRequired: 'foundation' | 'balanced' | 'transform';
+  tags: string[];
+}
+
+export const GROUP_SESSIONS: GroupSession[] = [
+  {
+    id: 'gs-1',
+    title: 'Morning Flow Yoga',
+    category: 'yoga',
+    instructor: 'Priya Nair',
+    instructorTitle: 'Yoga Therapist',
+    days: ['Mon', 'Wed', 'Fri'],
+    time: '07:30 AM',
+    duration: 45,
+    level: 'Beginner',
+    capacity: 20,
+    enrolled: 14,
+    description: 'A gentle morning flow to awaken the body and calm the mind. Ideal for all levels, focusing on spinal mobility and breath awareness.',
+    planRequired: 'foundation',
+    tags: ['Spine', 'Breath', 'Morning'],
+  },
+  {
+    id: 'gs-2',
+    title: 'Spinal Recovery Yoga',
+    category: 'yoga',
+    instructor: 'Dr. Arjun Mehta',
+    instructorTitle: 'Clinical Yoga Specialist',
+    days: ['Tue', 'Thu'],
+    time: '08:00 AM',
+    duration: 60,
+    level: 'Intermediate',
+    capacity: 15,
+    enrolled: 11,
+    description: 'Therapeutic sequences targeting lower back pain and spinal alignment. Evidence-based postures designed for recovery and long-term resilience.',
+    planRequired: 'foundation',
+    tags: ['Back Pain', 'Therapeutic', 'Recovery'],
+  },
+  {
+    id: 'gs-3',
+    title: 'Pranayama & Breathwork',
+    category: 'breathwork',
+    instructor: 'Kavitha Rao',
+    instructorTitle: 'Breath Coach',
+    days: ['Mon', 'Wed', 'Fri'],
+    time: '06:30 AM',
+    duration: 30,
+    level: 'Beginner',
+    capacity: 25,
+    enrolled: 19,
+    description: 'Explore ancient pranayama techniques including Nadi Shodhana, Kapalbhati, and Bhramari. Reduce stress and build respiratory strength.',
+    planRequired: 'foundation',
+    tags: ['Stress', 'Breath', 'Calm'],
+  },
+  {
+    id: 'gs-4',
+    title: 'Guided Meditation',
+    category: 'meditation',
+    instructor: 'Siddharth Iyer',
+    instructorTitle: 'Mindfulness Practitioner',
+    days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+    time: '07:00 PM',
+    duration: 20,
+    level: 'Beginner',
+    capacity: 30,
+    enrolled: 22,
+    description: 'End your day with a guided mindfulness session. Body scan, visualization, and breath anchoring techniques to improve sleep and mental clarity.',
+    planRequired: 'foundation',
+    tags: ['Sleep', 'Mindfulness', 'Evening'],
+  },
+  {
+    id: 'gs-5',
+    title: 'Hip & Joint Mobility',
+    category: 'mobility',
+    instructor: 'Meera Suresh',
+    instructorTitle: 'Physiotherapy Specialist',
+    days: ['Tue', 'Thu'],
+    time: '09:30 AM',
+    duration: 45,
+    level: 'Intermediate',
+    capacity: 12,
+    enrolled: 8,
+    description: 'Targeted joint mobilization for hips, knees, and ankles. Great for desk workers, athletes, and anyone managing chronic joint stiffness.',
+    planRequired: 'balanced',
+    tags: ['Joints', 'Mobility', 'Pain Relief'],
+  },
+];
+
 export const MOCK_AI_DATA = {
   wellnessScore: 78,
   streak: 5,
