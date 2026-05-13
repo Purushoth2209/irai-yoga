@@ -41,10 +41,12 @@ function MainLayout({ children, user }: { children: React.ReactNode, user: UserT
           className="flex-1 overflow-y-auto overflow-x-hidden relative"
         >
           {children}
-          {/* Add padding at bottom of content if nav is showing to prevent overlap */}
           {showNav && <div className="h-16" />}
         </motion.main>
-        
+
+        {/* Portal target for bottom sheets and modals — sits above content, inside phone frame */}
+        <div id="modal-root" className="absolute inset-0 pointer-events-none z-[60] rounded-[40px] overflow-hidden" />
+
         {showNav && (
           <nav className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-brand-border px-6 py-3 pb-safe-area-bottom z-50 flex justify-between items-center shadow-[0_-1px_10px_rgba(0,0,0,0.02)]">
             <BottomNav />
