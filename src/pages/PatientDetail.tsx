@@ -1,96 +1,156 @@
-import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, MessageSquare, Phone, MoreVertical, Calendar, FileText, Activity } from 'lucide-react';
-import { MOCK_PATIENTS } from '../mockData';
 import { motion } from 'motion/react';
+import {
+  ArrowLeft, MessageSquare, Phone, Calendar, Activity,
+  FileText, Plus,
+} from 'lucide-react';
+import { MOCK_PATIENTS } from '../mockData';
+import { cn } from '../lib/utils';
 
 export default function PatientDetail() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const patient = MOCK_PATIENTS.find(p => p.id === id) || MOCK_PATIENTS[0];
+  const { id }    = useParams();
+  const navigate  = useNavigate();
+  const patient   = MOCK_PATIENTS.find(p => p.id === id) ?? MOCK_PATIENTS[0];
+
+  const notes = [
+    { session: 10, date: 'Oct 12, 2024', text: 'Patient showing positive response to the new diet plan. Reduced sugar intake significantly. Vitals look stable.' },
+    { session:  9, date: 'Sep 28, 2024', text: 'Discussed new meal prep strategy. Patient is more motivated this week. Blood pressure reading normal.' },
+  ];
 
   return (
-    <div className="pb-10 relative bg-white min-h-screen">
-      {/* Header */}
-      <div className="bg-brand-primary h-64 pt-12 px-5 relative">
-        <div className="flex items-center justify-between text-white mb-6">
-          <button onClick={() => navigate(-1)} className="p-2 bg-white/10 rounded-xl backdrop-blur-sm">
-            <ChevronLeft size={20} />
+    <div className="min-h-full bg-brand-50 pb-24">
+
+      {/* ── Dark hero header ── */}
+      <div className="bg-gradient-to-br from-[#263d23] to-[#192b16] relative overflow-hidden" style={{ minHeight: 240 }}>
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-white/[0.03] rounded-full" />
+        <div className="absolute bottom-0 -left-12 w-40 h-40 bg-white/[0.03] rounded-full blur-2xl" />
+
+        {/* Top nav */}
+        <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-9 h-9 bg-white/10 border border-white/15 rounded-full flex items-center justify-center active:scale-95 transition-all"
+          >
+            <ArrowLeft size={16} className="text-white" />
           </button>
-          <div className="flex gap-2">
-            <button className="p-2 bg-white/10 rounded-xl backdrop-blur-sm">
-              <Phone size={20} />
-            </button>
-            <button className="p-2 bg-white/10 rounded-xl backdrop-blur-sm">
-              <MoreVertical size={20} />
-            </button>
-          </div>
+          <button className="w-9 h-9 bg-white/10 border border-white/15 rounded-full flex items-center justify-center active:scale-95 transition-all">
+            <Phone size={16} className="text-white" />
+          </button>
         </div>
 
-        <div className="flex flex-col items-center text-center space-y-2 translate-y-4">
-           <img src={patient.avatar} alt={patient.name} className="w-24 h-24 rounded-[32px] border-4 border-white shadow-xl object-cover" />
-           <div className="text-white">
-              <h1 className="text-xl font-bold">{patient.name}</h1>
-              <p className="text-white/70 text-xs font-semibold uppercase tracking-wider">{patient.condition}</p>
-           </div>
+        {/* Patient info */}
+        <div className="relative z-10 flex flex-col items-center pb-8 px-5">
+          <img
+            src={patient.avatar}
+            alt={patient.name}
+            className="w-20 h-20 rounded-[24px] border-4 border-white/20 shadow-xl object-cover mb-3"
+          />
+          <h1 className="serif text-[24px] text-white leading-none mb-1">{patient.name}</h1>
+          <p className="small-caps text-[8px] text-white/40">{patient.condition}</p>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="pt-20 px-5 space-y-8">
-        {/* Contact Quick Actions */}
-        <div className="flex gap-4">
-          <button className="flex-1 bg-brand-primary text-white py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-brand-primary/20">
-            <MessageSquare size={18} />
-            <span>Message</span>
+      {/* ── Body ── */}
+      <div className="p-5 -mt-4 space-y-5">
+
+        {/* Action buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex gap-3"
+        >
+          <button className="flex-1 bg-forest text-white py-3 rounded-2xl font-bold text-[12px] flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all">
+            <MessageSquare size={15} /> Message
           </button>
-          <button className="flex-1 bg-brand-secondary text-brand-primary py-3 rounded-2xl font-bold border border-brand-accent/20">
-            View Plans
+          <button className="flex-1 bg-white border border-brand-border text-slate py-3 rounded-2xl font-bold text-[12px] flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all">
+            <FileText size={15} /> View Plans
           </button>
+        </motion.div>
+
+        {/* Info grid */}
+        <div className="grid grid-cols-2 gap-3">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="bg-white rounded-2xl border border-brand-border shadow-sm p-4 flex items-center gap-3"
+          >
+            <div className="w-9 h-9 bg-[#f0f4ee] rounded-xl flex items-center justify-center shrink-0">
+              <Calendar size={16} className="text-forest" />
+            </div>
+            <div>
+              <p className="small-caps text-[7px] text-gray-400">Next Appt.</p>
+              <p className="text-[11px] font-bold text-slate">
+                {new Date(patient.nextAppointment + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-2xl border border-brand-border shadow-sm p-4 flex items-center gap-3"
+          >
+            <div className="w-9 h-9 bg-[#f0f4ee] rounded-xl flex items-center justify-center shrink-0">
+              <Activity size={16} className="text-forest" />
+            </div>
+            <div>
+              <p className="small-caps text-[7px] text-gray-400">Status</p>
+              <p className="text-[11px] font-bold text-forest">Active</p>
+            </div>
+          </motion.div>
         </div>
 
-        {/* Vital Info */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-2xl border border-brand-secondary flex items-center gap-3 card-shadow">
-             <div className="p-2 bg-brand-accent/10 text-brand-accent rounded-lg">
-                <Calendar size={18} />
-             </div>
-             <div>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">Next Appt.</p>
-                <p className="text-xs font-bold text-slate-800">{patient.nextAppointment}</p>
-             </div>
+        {/* Contact info */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bg-white rounded-2xl border border-brand-border shadow-sm p-4 space-y-3"
+        >
+          <p className="small-caps text-gray-400">Contact Info</p>
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="small-caps text-[7px] text-gray-400">Email</span>
+              <span className="text-[11px] font-medium text-slate">{patient.email}</span>
+            </div>
+            <div className="h-px bg-brand-border opacity-50" />
+            <div className="flex justify-between">
+              <span className="small-caps text-[7px] text-gray-400">Phone</span>
+              <span className="text-[11px] font-medium text-slate">{patient.phone}</span>
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-2xl border border-brand-secondary flex items-center gap-3 card-shadow">
-             <div className="p-2 bg-accent-coral/10 text-accent-coral rounded-lg">
-                <Activity size={18} />
-             </div>
-             <div>
-                <p className="text-[10px] text-slate-400 font-bold uppercase">Status</p>
-                <p className="text-xs font-bold text-slate-800">In Progress</p>
-             </div>
-          </div>
-        </div>
+        </motion.div>
 
-        {/* Medical History Section */}
-        <div className="space-y-4">
-           <div className="flex items-center justify-between">
-              <h3 className="font-bold text-slate-800">Consultation Notes</h3>
-              <button className="text-brand-primary text-xs font-bold">+ Add Note</button>
-           </div>
-           <div className="space-y-3">
-              {[1, 2].map((_, i) => (
-                <div key={i} className="p-4 bg-white rounded-2xl border border-brand-secondary card-shadow space-y-2">
-                   <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-bold text-brand-primary bg-natural px-2 py-0.5 rounded">Session #{10-i}</span>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase">Oct 12, 2023</span>
-                   </div>
-                   <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                     Patient showing positive response to the new diet plan. Reduced sugar intake significantly. Vitals look stable.
-                   </p>
-                </div>
-              ))}
-           </div>
-        </div>
+        {/* Consultation notes */}
+        <section className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <p className="small-caps text-gray-400">Consultation Notes</p>
+            <button className="flex items-center gap-1 small-caps text-[8px] text-forest">
+              <Plus size={11} /> Add Note
+            </button>
+          </div>
+
+          {notes.map((note, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + i * 0.07 }}
+              className="bg-white rounded-2xl border border-brand-border shadow-sm p-4 space-y-2"
+            >
+              <div className="flex justify-between items-center">
+                <span className="small-caps text-[7px] text-forest bg-[#f0f4ee] px-2 py-0.5 rounded-full border border-forest/20">
+                  Session #{note.session}
+                </span>
+                <span className="small-caps text-[7px] text-gray-400">{note.date}</span>
+              </div>
+              <p className="text-[11px] text-gray-500 leading-relaxed">{note.text}</p>
+            </motion.div>
+          ))}
+        </section>
       </div>
     </div>
   );
