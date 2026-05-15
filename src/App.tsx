@@ -7,13 +7,14 @@ import RolePicker from './pages/RolePicker';
 import Login      from './pages/Login';
 
 // Practitioner app
-import Layout        from './components/Layout';
-import Home          from './pages/Home';
-import Clients       from './pages/Clients';
-import Schedule      from './pages/Schedule';
-import Chats         from './pages/Chats';
-import Profile       from './pages/Profile';
-import PatientDetail from './pages/PatientDetail';
+import Layout                  from './components/Layout';
+import Home                    from './pages/Home';
+import Clients                 from './pages/Clients';
+import Schedule                from './pages/Schedule';
+import Chats                   from './pages/Chats';
+import Profile                 from './pages/Profile';
+import PatientDetail           from './pages/PatientDetail';
+import PractitionerSessionRoom from './pages/PractitionerSessionRoom';
 
 // Admin app
 import AdminLayout        from './components/AdminLayout';
@@ -50,6 +51,16 @@ export default function App() {
             <Route path="chats"       element={<Chats />} />
             <Route path="profile"     element={<Profile />} />
           </Route>
+
+          {/* ── Practitioner Session Room (outside Layout — full screen) ── */}
+          <Route
+            path="/practitioner/session/:id"
+            element={
+              <ProtectedRoute role="practitioner">
+                <PractitionerSessionRoom />
+              </ProtectedRoute>
+            }
+          />
 
           {/* ── Admin App ───────────────────────────────────────────── */}
           <Route

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
-import { Bell, ArrowRight, Star, Users, Calendar, Clock } from 'lucide-react';
+import { Bell, ArrowRight, Star, Users, Calendar, Clock, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { MOCK_PRACTITIONER, MOCK_APPOINTMENTS } from '../mockData';
+import { MOCK_PRACTITIONER, MOCK_APPOINTMENTS, MOCK_GROUP_SESSIONS } from '../mockData';
 import { cn } from '../lib/utils';
 
 const TYPE_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
@@ -11,9 +11,10 @@ const TYPE_CONFIG: Record<string, { color: string; bg: string; label: string }> 
 };
 
 export default function Home() {
-  const navigate  = useNavigate();
-  const nextAppt  = MOCK_APPOINTMENTS.find(a => a.status === 'confirmed');
+  const navigate   = useNavigate();
+  const nextAppt   = MOCK_APPOINTMENTS.find(a => a.status === 'confirmed');
   const todayAppts = MOCK_APPOINTMENTS.filter(a => a.status === 'confirmed');
+  const nextGroup  = MOCK_GROUP_SESSIONS[0];
 
   return (
     <div className="min-h-full bg-brand-50 pb-24">
@@ -24,7 +25,6 @@ export default function Home() {
         <div className="absolute bottom-0 left-8 w-24 h-24 bg-white/[0.03] rounded-full blur-2xl" />
 
         <div className="relative z-10">
-          {/* Greeting row */}
           <div className="flex items-start justify-between mb-6">
             <div>
               <p className="small-caps text-[7px] text-white/40 mb-1.5 tracking-widest">Welcome back</p>
@@ -37,7 +37,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Stat chips */}
           <div className="grid grid-cols-2 gap-2.5">
             <div className="bg-white/[0.07] border border-white/10 rounded-2xl px-4 py-3 text-left">
               <p className="small-caps text-[6px] text-white/35 mb-1">Avg Rating</p>
@@ -57,17 +56,13 @@ export default function Home() {
       {/* ── Body ── */}
       <div className="p-5 space-y-6">
 
-        {/* Next Session */}
+        {/* ── Next 1-on-1 Session ── */}
         {nextAppt && (
-          <motion.section
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <p className="small-caps text-gray-400 px-1 mb-3">Next Session</p>
+          <motion.section initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <p className="small-caps text-gray-400 px-1 mb-3">Next 1-on-1 Session</p>
             <div className="bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden">
               <div className="h-0.5 w-full bg-forest" />
-              <div className="p-4 flex items-center gap-4">
+              <div className="p-4 flex items-center gap-3">
                 <div className="w-12 h-12 bg-[#f0f4ee] rounded-xl flex flex-col items-center justify-center shrink-0">
                   <span className="text-[16px] font-bold text-forest leading-none">
                     {nextAppt.time.split(':')[0]}
@@ -81,28 +76,51 @@ export default function Home() {
                   <p className="small-caps text-[7px] text-gray-400 mt-0.5 capitalize">{nextAppt.type}</p>
                 </div>
                 <button
-                  onClick={() => navigate('/practitioner/clients')}
-                  className="w-9 h-9 bg-forest rounded-xl flex items-center justify-center text-white shrink-0 active:scale-95 transition-all"
+                  onClick={() => navigate(`/practitioner/session/${nextAppt.id}`)}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-forest rounded-xl text-white text-[10px] font-bold shrink-0 active:scale-95 transition-all"
                 >
-                  <ArrowRight size={16} />
+                  <Play size={11} fill="white" /> Start
                 </button>
               </div>
             </div>
           </motion.section>
         )}
 
-        {/* Today's Schedule */}
+        {/* ── Next Group Session ── */}
+        {nextGroup && (
+          <motion.section initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+            <p className="small-caps text-gray-400 px-1 mb-3">Next Group Session</p>
+            <div className="bg-white rounded-2xl border border-brand-border shadow-sm overflow-hidden">
+              <div className="h-0.5 w-full bg-[#4B7399]" />
+              <div className="p-4 flex items-center gap-3">
+                <div className="w-12 h-12 bg-[#eef3f9] rounded-xl flex flex-col items-center justify-center shrink-0">
+                  <Users size={16} className="text-[#4B7399]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-bold text-slate truncate">{nextGroup.title}</p>
+                  <p className="small-caps text-[7px] text-gray-400 mt-0.5">
+                    {nextGroup.time} · {nextGroup.enrolled}/{nextGroup.capacity} enrolled
+                  </p>
+                </div>
+                <button
+                  onClick={() => navigate(`/practitioner/session/${nextGroup.id}?type=group`)}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#4B7399] rounded-xl text-white text-[10px] font-bold shrink-0 active:scale-95 transition-all"
+                >
+                  <Play size={11} fill="white" /> Go Live
+                </button>
+              </div>
+            </div>
+          </motion.section>
+        )}
+
+        {/* ── Today's Schedule ── */}
         <section className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <p className="small-caps text-gray-400">Today's Schedule</p>
-            <button
-              onClick={() => navigate('/practitioner/schedule')}
-              className="small-caps text-[8px] text-forest"
-            >
+            <button onClick={() => navigate('/practitioner/schedule')} className="small-caps text-[8px] text-forest">
               View All
             </button>
           </div>
-
           <div className="space-y-2.5">
             {todayAppts.map((appt, i) => {
               const cfg = TYPE_CONFIG[appt.type] ?? TYPE_CONFIG['consultation'];
@@ -111,33 +129,36 @@ export default function Home() {
                   key={appt.id}
                   initial={{ opacity: 0, x: 12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.15 + i * 0.07 }}
+                  transition={{ delay: 0.2 + i * 0.07 }}
                   className="bg-white rounded-2xl border border-brand-border shadow-sm p-4 flex items-center gap-3"
                 >
                   <div className="w-1.5 h-10 rounded-full shrink-0" style={{ backgroundColor: cfg.color }} />
-                  <div className="flex items-center gap-2 w-16 shrink-0">
+                  <div className="flex items-center gap-1.5 w-16 shrink-0">
                     <Clock size={10} className="text-gray-300" />
                     <span className="text-[9px] font-bold text-gray-400">{appt.time}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[12px] font-bold text-slate truncate">{appt.patientName}</p>
                   </div>
-                  <span className={cn('small-caps text-[7px] px-2 py-0.5 rounded-full', cfg.bg)} style={{ color: cfg.color }}>
-                    {cfg.label}
-                  </span>
+                  <button
+                    onClick={() => navigate(`/practitioner/session/${appt.id}`)}
+                    className="w-7 h-7 bg-[#f0f4ee] rounded-lg flex items-center justify-center active:scale-95 transition-all shrink-0"
+                  >
+                    <Play size={10} className="text-forest" fill="#4a6741" />
+                  </button>
                 </motion.div>
               );
             })}
           </div>
         </section>
 
-        {/* Quick Actions */}
+        {/* ── Quick Access ── */}
         <section className="space-y-3">
           <p className="small-caps text-gray-400 px-1">Quick Access</p>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { icon: Users,    label: 'Clients',  sub: 'View all clients',   path: '/practitioner/clients',  bg: 'bg-[#f0f4ee]', text: 'text-forest'    },
-              { icon: Calendar, label: 'Schedule', sub: 'Manage time slots',  path: '/practitioner/schedule', bg: 'bg-[#eef3f9]', text: 'text-[#4B7399]' },
+              { icon: Users,    label: 'Clients',        sub: 'View all clients',     path: '/practitioner/clients',  bg: 'bg-[#f0f4ee]', text: 'text-forest'    },
+              { icon: Calendar, label: 'Schedule',       sub: 'Manage time slots',    path: '/practitioner/schedule', bg: 'bg-[#eef3f9]', text: 'text-[#4B7399]' },
             ].map(({ icon: Icon, label, sub, path, bg, text }) => (
               <motion.button
                 key={label}

@@ -28,3 +28,34 @@ export interface Practitioner {
   experience: string;
   about: string;
 }
+
+export interface AISessionNote {
+  id: string;
+  patientId: string;
+  date: string;
+  sessionNumber: number;
+  sessionType: 'initial' | 'follow-up' | 'consultation';
+  duration: number;
+  soap: {
+    subjective: string;
+    objective: string;
+    assessment: string;
+    plan: string;
+  };
+  flags: { text: string; severity: 'info' | 'caution' | 'alert' }[];
+  painBefore: number;
+  painAfter: number;
+  aiConfidence: number;
+}
+
+export interface PractitionerGroupSession {
+  id: string;
+  title: string;
+  category: 'yoga' | 'breathwork' | 'meditation' | 'mobility';
+  time: string;
+  days: string[];
+  duration: number;
+  enrolled: number;
+  capacity: number;
+  level: 'Beginner' | 'Intermediate' | 'Advanced';
+}
